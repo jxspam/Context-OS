@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ContextOS - Command Palette</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-container": "#febe97",
+                    "surface-container-highest": "#e2e2e2",
+                    "inverse-primary": "#ffb688",
+                    "on-primary": "#ffffff",
+                    "surface-container": "#eeeeee",
+                    "on-surface-variant": "#564338",
+                    "surface-dim": "#dadada",
+                    "outline-variant": "#dcc1b2",
+                    "on-secondary-container": "#794b2c",
+                    "on-error": "#ffffff",
+                    "on-primary-container": "#683000",
+                    "secondary-fixed": "#ffdbc7",
+                    "surface-tint": "#974800",
+                    "on-error-container": "#93000a",
+                    "primary": "#974800",
+                    "surface-container-low": "#f3f3f3",
+                    "error": "#ba1a1a",
+                    "on-surface": "#1a1c1c",
+                    "on-primary-fixed-variant": "#733600",
+                    "secondary": "#835333",
+                    "on-secondary": "#ffffff",
+                    "tertiary-fixed": "#b9eaff",
+                    "on-tertiary-container": "#004658",
+                    "inverse-on-surface": "#f1f1f1",
+                    "outline": "#897366",
+                    "background": "#f9f9f9",
+                    "secondary-fixed-dim": "#f8b992",
+                    "primary-container": "#fc8f3f",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary-fixed": "#311300",
+                    "tertiary-container": "#00bae6",
+                    "surface": "#f9f9f9",
+                    "inverse-surface": "#2f3131",
+                    "on-tertiary": "#ffffff",
+                    "on-tertiary-fixed": "#001f29",
+                    "surface-bright": "#f9f9f9",
+                    "primary-fixed": "#ffdbc7",
+                    "surface-variant": "#e2e2e2",
+                    "surface-container-high": "#e8e8e8",
+                    "on-primary-fixed": "#311300",
+                    "on-secondary-fixed-variant": "#673c1e",
+                    "error-container": "#ffdad6",
+                    "on-tertiary-fixed-variant": "#004d61",
+                    "tertiary": "#006781",
+                    "primary-fixed-dim": "#ffb688",
+                    "tertiary-fixed-dim": "#56d5ff",
+                    "on-background": "#1a1c1c"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Inter"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+        }
+        .tonal-stacking {
+            background-color: #f3f3f3;
+        }
+        .adaptive-gradient {
+            background: linear-gradient(135deg, #fc8f3f 0%, #febe97 100%);
+        }
+        .glass-overlay {
+            background: rgba(226, 226, 222, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .command-palette-shadow {
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container">
+<!-- SIDE NAVBAR (ANCHOR) -->
+<aside class="fixed left-0 top-0 h-full flex flex-col p-6 bg-[#f3f3f3] dark:bg-slate-900 h-screen w-64 border-none font-['Inter'] leading-[1.6] tracking-tight z-10">
+<div class="mb-10">
+<span class="text-xl font-bold tracking-tighter text-[#fc8f3f]">ContextOS</span>
+<p class="text-xs text-slate-500 uppercase tracking-widest mt-1">Kinetic Sanctuary</p>
+</div>
+<nav class="flex-1 space-y-2">
+<div class="flex items-center gap-3 p-3 rounded-lg text-[#fc8f3f] font-semibold transition-colors">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span>Today</span>
+</div>
+<div class="flex items-center gap-3 p-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-[#e8e8e8] dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined" data-icon="event_upcoming">event_upcoming</span>
+<span>Upcoming</span>
+</div>
+<div class="flex items-center gap-3 p-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-[#e8e8e8] dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined" data-icon="folder_open">folder_open</span>
+<span>Projects</span>
+</div>
+<div class="flex items-center gap-3 p-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-[#e8e8e8] dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined" data-icon="insights">insights</span>
+<span>Insights</span>
+</div>
+<div class="mt-auto pt-10">
+<div class="flex items-center gap-3 p-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-[#e8e8e8] dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>Settings</span>
+</div>
+</div>
+</nav>
+<button class="mt-6 adaptive-gradient text-white py-3 px-4 rounded-xl font-semibold flex items-center justify-center gap-2 shadow-sm">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+            New Context
+        </button>
+</aside>
+<!-- TOP NAVBAR (ANCHOR) -->
+<header class="fixed top-0 right-0 left-64 h-16 flex items-center justify-between px-10 z-40 bg-[#f9f9f9]/70 dark:bg-slate-950/70 backdrop-blur-md shadow-[0px_20px_40px_rgba(26,28,28,0.05)] font-['Inter'] leading-[1.6]">
+<div class="flex items-center gap-8">
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-slate-400" data-icon="search">search</span>
+<input class="bg-surface-container-low border-none rounded-full pl-10 pr-4 py-1.5 text-sm w-64 focus:ring-2 focus:ring-primary-container outline-none" placeholder="Search workspace..." type="text"/>
+</div>
+<nav class="flex gap-6">
+<a class="text-[#fc8f3f] border-b-2 border-[#fc8f3f] font-medium py-1" href="#">Focus</a>
+<a class="text-slate-600 dark:text-slate-400 opacity-80 transition-opacity py-1" href="#">Collaborate</a>
+</nav>
+</div>
+<div class="flex items-center gap-5">
+<span class="material-symbols-outlined text-slate-600 cursor-pointer" data-icon="bolt">bolt</span>
+<span class="material-symbols-outlined text-slate-600 cursor-pointer" data-icon="notifications">notifications</span>
+<img alt="Profile" class="w-8 h-8 rounded-full object-cover" data-alt="close-up portrait of a professional man with a friendly expression in a modern office setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7KgHIhmKcMpxfRvqmOJkPif3RJ2AfKn46wEBWiqSdyhb6_h_FKUcIJhBSYjXSvkdvHIWGa8TETbUZSO4LPjfxfCvRNj9twc4huqyFapfkGmXeH5ZRVwAHEsl_fAM4md64SqwLTFraxsEwFvCwjBSnG5GYXMTMgOofgMmsxYCk8RGWnndfMAIlz3V6UwC7JLxyCwUcdC0lPEWeBdkkolTowaAiIX0TOllDDCc_xFzQbAmVYz0fTK9napg-KG07k4rq-XYMW6iNOwQ"/>
+</div>
+</header>
+<!-- MAIN CONTENT CANVAS -->
+<main class="ml-64 pt-24 px-10 min-h-screen">
+<section class="mb-12">
+<h1 class="text-4xl font-black tracking-tight text-on-surface mb-2">Morning, Julian.</h1>
+<p class="text-on-surface-variant text-lg">Your sanctuary is ready. You have 3 deep-work sessions scheduled today.</p>
+</section>
+<!-- BENTO GRID CONTENT (UNFOCUSED BACKGROUND) -->
+<div class="grid grid-cols-12 gap-6 opacity-40 grayscale-[0.2]">
+<div class="col-span-8 bg-surface-container-low rounded-2xl p-8 aspect-[16/7] relative overflow-hidden">
+<div class="relative z-10">
+<span class="bg-primary-container/10 text-primary font-bold px-3 py-1 rounded-full text-xs uppercase tracking-widest">Active Project</span>
+<h2 class="text-3xl font-bold mt-4 mb-2">Kinetic Brand Evolution</h2>
+<p class="text-on-surface-variant max-w-md leading-relaxed">Phase 2: Refining the atmospheric depth and tonal minimalism for the user workspace.</p>
+</div>
+<div class="absolute right-0 bottom-0 w-1/2 h-full opacity-20">
+<img class="object-cover w-full h-full" data-alt="minimalist architectural detail of white curves and soft shadows in bright daylight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBG4CM1kN6eZv76-8tNvsJyjTs7MCikYWR0NWacbTlFU1PaKRReiT4-VYn0ogYzGPJh_WgThkwSWOejFeggiQOcPTYYCBXfJF5w8m2Zb_0AtgHPdvxCfcIfxv3Vxfg8WUeGi-zjHQny8znYOjFgTtYgZJe8joZC3JwUfvb6gG_zCS8AxYwMEINPN9CBWMjO9fnIsbabgT69hRvJBRY5czHGC1XUB6gVIDr8I8h23Tm6uMv3uCLlp-jZ2YYlQioePd7dzeF-Yq7JO34"/>
+</div>
+</div>
+<div class="col-span-4 bg-surface-container-high rounded-2xl p-8 flex flex-col justify-between">
+<div>
+<h3 class="font-bold text-xl mb-4">Focus Timer</h3>
+<div class="text-5xl font-black text-primary tracking-tighter">45:00</div>
+</div>
+<div class="flex gap-2">
+<button class="bg-on-surface text-surface px-6 py-2 rounded-full text-sm font-semibold">Start</button>
+</div>
+</div>
+</div>
+</main>
+<!-- COMMAND PALETTE OVERLAY -->
+<div class="fixed inset-0 z-50 flex items-start justify-center pt-[153px] bg-on-surface/5 backdrop-blur-[2px]">
+<div class="glass-overlay w-full max-w-2xl rounded-2xl command-palette-shadow overflow-hidden border border-outline-variant/15">
+<!-- Search Input Area -->
+<div class="relative flex items-center p-6 bg-white/40">
+<span class="material-symbols-outlined text-primary text-2xl mr-4" data-icon="search">search</span>
+<input autofocus="" class="w-full bg-transparent border-none focus:ring-0 text-xl font-medium placeholder-slate-400 text-on-surface outline-none" placeholder="Type a command or search..." type="text"/>
+<div class="flex items-center gap-1.5 ml-4">
+<kbd class="bg-surface-container-highest px-2 py-1 rounded text-[10px] font-bold text-slate-500">ESC</kbd>
+</div>
+</div>
+<!-- Content Area -->
+<div class="p-4 space-y-6">
+<!-- Quick Actions Section -->
+<section>
+<div class="px-4 mb-3">
+<span class="text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400">Quick Actions</span>
+</div>
+<div class="grid grid-cols-3 gap-3 px-2">
+<button class="flex flex-col items-center justify-center p-4 rounded-xl bg-surface-container-lowest hover:bg-white transition-all group scale-98-active">
+<div class="w-10 h-10 rounded-full bg-primary-container/10 flex items-center justify-center text-primary mb-3 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" data-icon="add_task">add_task</span>
+</div>
+<span class="text-xs font-semibold">Create Task</span>
+</button>
+<button class="flex flex-col items-center justify-center p-4 rounded-xl bg-surface-container-lowest hover:bg-white transition-all group scale-98-active">
+<div class="w-10 h-10 rounded-full bg-tertiary-container/10 flex items-center justify-center text-tertiary mb-3 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" data-icon="travel_explore">travel_explore</span>
+</div>
+<span class="text-xs font-semibold">Search Context</span>
+</button>
+<button class="flex flex-col items-center justify-center p-4 rounded-xl bg-surface-container-lowest hover:bg-white transition-all group scale-98-active">
+<div class="w-10 h-10 rounded-full bg-secondary-container/20 flex items-center justify-center text-secondary mb-3 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span>
+</div>
+<span class="text-xs font-semibold">AI Chat</span>
+</button>
+</div>
+</section>
+<!-- Suggestions / Recent Section -->
+<section>
+<div class="px-4 mb-2">
+<span class="text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400">Recent Views</span>
+</div>
+<div class="space-y-1">
+<div class="flex items-center justify-between p-3 px-4 rounded-xl hover:bg-white/60 cursor-pointer group transition-colors">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary" data-icon="description">description</span>
+<span class="text-sm font-medium">Kinetic Sanctuary Design System.pdf</span>
+</div>
+<span class="text-[10px] text-slate-400 font-mono">12m ago</span>
+</div>
+<div class="flex items-center justify-between p-3 px-4 rounded-xl hover:bg-white/60 cursor-pointer group transition-colors">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary" data-icon="folder">folder</span>
+<span class="text-sm font-medium">Q3 Marketing Strategy</span>
+</div>
+<span class="text-[10px] text-slate-400 font-mono">2h ago</span>
+</div>
+<div class="flex items-center justify-between p-3 px-4 rounded-xl hover:bg-white/60 cursor-pointer group transition-colors">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary" data-icon="alternate_email">alternate_email</span>
+<span class="text-sm font-medium">Review feedback from Sarah</span>
+</div>
+<span class="text-[10px] text-slate-400 font-mono">Yesterday</span>
+</div>
+</div>
+</section>
+</div>
+<!-- Footer Meta -->
+<div class="p-4 bg-surface-container-highest/30 flex items-center justify-between">
+<div class="flex gap-4">
+<div class="flex items-center gap-1">
+<kbd class="bg-surface-container-highest px-1.5 py-0.5 rounded text-[9px] font-bold text-slate-600 border border-outline-variant/20">↑↓</kbd>
+<span class="text-[10px] text-slate-500 font-medium">to navigate</span>
+</div>
+<div class="flex items-center gap-1">
+<kbd class="bg-surface-container-highest px-1.5 py-0.5 rounded text-[9px] font-bold text-slate-600 border border-outline-variant/20">↵</kbd>
+<span class="text-[10px] text-slate-500 font-medium">to select</span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-[10px] text-slate-400 italic">Powered by ContextOS AI</span>
+</div>
+</div>
+</div>
+</div>
+</body></html>

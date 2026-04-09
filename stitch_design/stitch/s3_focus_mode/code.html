@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-container": "#febe97",
+                        "surface-container-highest": "#e2e2e2",
+                        "inverse-primary": "#ffb688",
+                        "on-primary": "#ffffff",
+                        "surface-container": "#eeeeee",
+                        "on-surface-variant": "#564338",
+                        "surface-dim": "#dadada",
+                        "outline-variant": "#dcc1b2",
+                        "on-secondary-container": "#794b2c",
+                        "on-error": "#ffffff",
+                        "on-primary-container": "#683000",
+                        "secondary-fixed": "#ffdbc7",
+                        "surface-tint": "#974800",
+                        "on-error-container": "#93000a",
+                        "primary": "#974800",
+                        "surface-container-low": "#f3f3f3",
+                        "error": "#ba1a1a",
+                        "on-surface": "#1a1c1c",
+                        "on-primary-fixed-variant": "#733600",
+                        "secondary": "#835333",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed": "#b9eaff",
+                        "on-tertiary-container": "#004658",
+                        "inverse-on-surface": "#f1f1f1",
+                        "outline": "#897366",
+                        "background": "#f9f9f9",
+                        "secondary-fixed-dim": "#f8b992",
+                        "primary-container": "#fc8f3f",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed": "#311300",
+                        "tertiary-container": "#00bae6",
+                        "surface": "#f9f9f9",
+                        "inverse-surface": "#2f3131",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-fixed": "#001f29",
+                        "surface-bright": "#f9f9f9",
+                        "primary-fixed": "#ffdbc7",
+                        "surface-variant": "#e2e2e2",
+                        "surface-container-high": "#e8e8e8",
+                        "on-primary-fixed": "#311300",
+                        "on-secondary-fixed-variant": "#673c1e",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-fixed-variant": "#004d61",
+                        "tertiary": "#006781",
+                        "primary-fixed-dim": "#ffb688",
+                        "tertiary-fixed-dim": "#56d5ff",
+                        "on-background": "#1a1c1c"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .tonal-stacking {
+            background: #f3f3f3;
+        }
+        .scale-98-active:active {
+            transform: scale(0.98);
+        }
+        .glass-panel {
+            background: rgba(249, 249, 249, 0.7);
+            backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-secondary-container selection:text-on-secondary-container overflow-hidden">
+<!-- Sidebar (Shared Component) -->
+<aside class="fixed left-0 top-0 h-full flex flex-col p-6 bg-[#f3f3f3] dark:bg-slate-900 h-screen w-64 border-none font-['Inter'] leading-[1.6] tracking-tight z-50">
+<div class="mb-10">
+<h1 class="text-xl font-bold tracking-tighter text-[#fc8f3f]">ContextOS</h1>
+<p class="text-[10px] uppercase tracking-[0.2em] text-slate-400">Kinetic Sanctuary</p>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors hover:bg-[#e8e8e8] dark:hover:bg-slate-800 scale-98-active duration-200 text-slate-500 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="font-medium">Today</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors hover:bg-[#e8e8e8] dark:hover:bg-slate-800 scale-98-active duration-200 text-slate-500 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined" data-icon="event_upcoming">event_upcoming</span>
+<span class="font-medium">Upcoming</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors hover:bg-[#e8e8e8] dark:hover:bg-slate-800 scale-98-active duration-200 text-slate-500 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined" data-icon="folder_open">folder_open</span>
+<span class="font-medium">Projects</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors hover:bg-[#e8e8e8] dark:hover:bg-slate-800 scale-98-active duration-200 text-slate-500 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined" data-icon="insights">insights</span>
+<span class="font-medium">Insights</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors hover:bg-[#e8e8e8] dark:hover:bg-slate-800 scale-98-active duration-200 text-slate-500 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-medium">Settings</span>
+</a>
+</nav>
+<div class="mt-auto">
+<button class="w-full py-4 rounded-2xl bg-gradient-to-br from-[#fc8f3f] to-[#febe97] text-white font-bold tracking-tight shadow-lg shadow-orange-200 hover:opacity-90 transition-all scale-98-active">
+                New Context
+            </button>
+<div class="flex items-center gap-3 mt-8 p-2 rounded-xl">
+<img alt="User Workspace Profile" class="w-10 h-10 rounded-full object-cover" data-alt="Close-up portrait of a professional man with a kind expression in soft, natural window lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzIsPVXO5HCX-yBTJT0ERTfBFw7FG11zz81qMCCn1YUNNn_6_FMDzUEp0gaXcWsCj28g04WtGXiXD3eGliG_Q7TjaS9ZS26Nk0TMV3zcmWfCbKvUPX7f_6mxu4pAjKBh6oQbY95Jc6-m5vLK2Bwed8CQMK0Ezj53NWZvPUBoPwZu31jcCAAvQPgD9xirKpWgrbfpRcpAge9qegpNfap57KJyd927U7HN4wSDHWkJ3PGNkq7JYumsM9CS22bmVnVa0yAu2Oz6z03Kw"/>
+<div class="flex flex-col">
+<span class="text-sm font-bold">Julian Vane</span>
+<span class="text-xs text-slate-400">Pro Tier</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Top Navigation (Shared Component) -->
+<header class="fixed top-0 right-0 left-64 h-16 flex items-center justify-between px-10 z-40 bg-[#f9f9f9]/70 dark:bg-slate-950/70 backdrop-blur-md shadow-[0px_20px_40px_rgba(26,28,28,0.05)] font-['Inter'] leading-[1.6]">
+<div class="flex items-center gap-6">
+<div class="relative group">
+<span class="absolute inset-y-0 left-3 flex items-center text-slate-400">
+<span class="material-symbols-outlined text-lg">search</span>
+</span>
+<input class="bg-surface-container-high border-none rounded-full pl-10 pr-6 py-2 text-sm w-64 focus:ring-2 focus:ring-[#fc8f3f] transition-all" placeholder="Search contexts..." type="text"/>
+</div>
+<nav class="flex items-center gap-8 ml-4">
+<a class="text-sm font-semibold text-[#fc8f3f] border-b-2 border-[#fc8f3f] py-5 opacity-80 transition-opacity" href="#">Focus</a>
+<a class="text-sm font-medium text-slate-600 dark:text-slate-400 py-5 opacity-80 transition-opacity hover:text-[#fc8f3f]" href="#">Collaborate</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-600 hover:text-[#fc8f3f] transition-colors">
+<span class="material-symbols-outlined" data-icon="bolt">bolt</span>
+</button>
+<button class="p-2 text-slate-600 hover:text-[#fc8f3f] transition-colors relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-[#fc8f3f] rounded-full"></span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant/20">
+<img alt="Profile Avatar" class="w-full h-full object-cover" data-alt="Professional profile headshot with minimalist background and soft studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjootpvHLR-LfGrWWrsDQN84mG-CUoeA2DUf1y4gQZErf_KLwlUbQI1KjEMzuc9EExML9KsKMwbGjRXbNefnzP0L1X3mmcmAZXF5bdR7HIPc4ZPXzMJivGCqIsI6895MrVLfJp7nqOnv4w65kjsTNAjnwtrE7r1RkTNxs0zO8vpJ99oCCiFAugPBnpaCzEzu16qY7Qd8x4beydp4ZVwV9oC0dk-x-Y0knW_6tEpxxjpKAW6W_vmx-EV4A5XpWp8pUe9QOpLW3oWh0"/>
+</div>
+</div>
+</header>
+<!-- Main Content: Focus Mode Canvas -->
+<main class="fixed inset-0 left-64 top-16 bg-surface overflow-hidden flex items-center justify-center">
+<!-- Dimmed Background Elements -->
+<div class="absolute inset-0 z-0 opacity-10 pointer-events-none select-none overflow-hidden">
+<div class="absolute top-20 left-20 w-96 h-96 bg-[#fc8f3f] rounded-full blur-[120px]"></div>
+<div class="absolute bottom-20 right-20 w-[500px] h-[500px] bg-[#febe97] rounded-full blur-[160px]"></div>
+</div>
+<!-- Right Context Panel (Blurred/Softened) -->
+<div class="absolute right-0 top-0 bottom-0 w-80 bg-surface-container-low/30 backdrop-blur-md p-8 flex flex-col gap-8 z-10 opacity-40 hover:opacity-100 transition-opacity duration-700">
+<div>
+<h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-6">Related Context</h3>
+<div class="flex flex-col gap-6">
+<div class="p-4 rounded-2xl bg-surface-container-highest/50">
+<p class="text-xs text-slate-500 mb-1">Project</p>
+<p class="font-bold text-sm">Visual Identity System</p>
+</div>
+<div class="p-4 rounded-2xl bg-surface-container-highest/50">
+<p class="text-xs text-slate-500 mb-1">Note</p>
+<p class="font-bold text-sm">"The Curated Atelier" principles for typography and scale.</p>
+</div>
+</div>
+</div>
+<div class="mt-auto">
+<h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">Focus Mates</h3>
+<div class="flex -space-x-2">
+<img alt="Mate 1" class="w-8 h-8 rounded-full border-2 border-surface" data-alt="close up of woman with minimalist glasses in professional setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2aQ5jtWos4J_oxC_YCprAxnMZFaasXQ1DtKokW9JHJrGrE077mqrcJomDk-eS4XcTA7F30RVWUnMhhRA5NUWNJcoYMkGMoyYlArkfM5rZloJi1s6prxxhJRUrcXIHo3PDU-6254GJhpEZD3odvyvFr1DNM6a9UNaw5wlur13LaowdXq89n2zA6jn2UePc1J-b3Fr6H0jNRGP2qU5YXVeSzMva-Po_GC2aRTHbBZ_IAJbjTLNSYFNeDA-u_fX4bW1tlYNfmojjJc8"/>
+<img alt="Mate 2" class="w-8 h-8 rounded-full border-2 border-surface" data-alt="portrait of creative man in a bright loft studio" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC98UVSRZ2QASMUNWEZF2zUpM3vl2KtN2T5zOJpx1s2TY1nkj69Lalxwmc1omtfTYXDfqcrNuCyncaL8ZuM3GG9PLqarTHTsgXcTL1eQT3yVcUO5ABwl-gC8gq1dxl5MF3BYvHQQf3DC-kKZVuVgp2SRFNpN7dIXBlANGQR2_FdQ3ssR7zjg1hBMQaiZCKxZmSEUh99Re9SaQYfqoiDAvyPJWQ-joDCFoATQHxA3Jk2B60ztImxLgN0smjaZ5BsDgUw0FpkDByftDQ"/>
+<div class="w-8 h-8 rounded-full border-2 border-surface bg-surface-container-highest flex items-center justify-center text-[10px] font-bold">+4</div>
+</div>
+</div>
+</div>
+<!-- Active Focus Centerpiece -->
+<div class="relative z-20 flex flex-col items-center max-w-4xl w-full px-12">
+<!-- Timer Ring & Content Stack -->
+<div class="relative flex items-center justify-center mb-16">
+<!-- SVG Timer Ring -->
+<svg class="w-80 h-80 -rotate-90 drop-shadow-2xl">
+<circle class="text-surface-container-high" cx="160" cy="160" fill="transparent" r="150" stroke="currentColor" stroke-width="4"></circle>
+<circle class="text-[#fc8f3f] transition-all duration-1000" cx="160" cy="160" fill="transparent" r="150" stroke="currentColor" stroke-dasharray="942" stroke-dashoffset="235" stroke-width="4"></circle>
+</svg>
+<!-- Inner Task Detail -->
+<div class="absolute inset-0 flex flex-col items-center justify-center text-center p-12">
+<span class="text-6xl font-black tracking-tighter text-on-surface mb-2">18:42</span>
+<span class="text-xs uppercase tracking-[0.3em] font-bold text-slate-400">Minutes Remaining</span>
+</div>
+</div>
+<!-- Active Task Card -->
+<div class="w-full max-w-2xl bg-surface-container-lowest p-10 rounded-[32px] shadow-[0px_40px_80px_rgba(26,28,28,0.08)] flex flex-col gap-6 relative overflow-hidden group">
+<!-- Subtle Gradient Accent -->
+<div class="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-[#fc8f3f] to-[#febe97]"></div>
+<div class="flex justify-between items-start">
+<div>
+<div class="flex items-center gap-3 mb-2">
+<span class="bg-secondary-container/20 text-on-secondary-container text-[10px] font-extrabold uppercase tracking-widest px-3 py-1 rounded-full">Deep Work</span>
+<span class="text-slate-300">•</span>
+<span class="text-xs text-slate-500 font-medium italic">Context: Architecture</span>
+</div>
+<h2 class="text-3xl font-extrabold tracking-tight text-on-surface leading-tight">Refine Grid System for Editorial Dashboard</h2>
+</div>
+<button class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center hover:bg-secondary-container transition-colors group">
+<span class="material-symbols-outlined text-[#fc8f3f] group-hover:text-on-secondary-container" data-icon="edit">edit</span>
+</button>
+</div>
+<div class="flex items-center gap-8 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-400" data-icon="task_alt">task_alt</span>
+<span class="text-sm font-medium text-slate-600">4 / 12 Subtasks Done</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-400" data-icon="schedule">schedule</span>
+<span class="text-sm font-medium text-slate-600">Ends at 11:45 AM</span>
+</div>
+</div>
+<div class="flex gap-4 pt-4 border-t border-slate-50">
+<button class="flex-1 py-4 rounded-2xl bg-gradient-to-r from-[#fc8f3f] to-[#febe97] text-white font-bold text-sm tracking-wide shadow-lg shadow-orange-100 hover:scale-[1.02] active:scale-95 transition-all">
+                        Pause Session
+                    </button>
+<button class="px-8 py-4 rounded-2xl bg-surface-container-high text-on-surface font-bold text-sm tracking-wide hover:bg-surface-container-highest transition-colors">
+                        Mark as Done
+                    </button>
+</div>
+</div>
+<!-- Minimal Controls -->
+<div class="mt-12 flex items-center gap-10">
+<div class="flex items-center gap-4 text-slate-400 group cursor-pointer hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined" data-icon="music_note">music_note</span>
+<span class="text-xs font-bold tracking-widest uppercase">Deep Focus Beats</span>
+</div>
+<div class="h-1 w-1 rounded-full bg-slate-300"></div>
+<div class="flex items-center gap-4 text-slate-400 group cursor-pointer hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined" data-icon="do_not_disturb_on">do_not_disturb_on</span>
+<span class="text-xs font-bold tracking-widest uppercase">Notifications Muted</span>
+</div>
+</div>
+</div>
+<!-- Asymmetric Decorative Element (Editorial Feel) -->
+<div class="absolute bottom-12 left-12 max-w-[200px] opacity-20 pointer-events-none select-none">
+<h4 class="text-[8px] font-black uppercase tracking-[0.4em] text-slate-500 mb-4 leading-relaxed">System Status: Sanctuary Protocol Active</h4>
+<div class="flex flex-col gap-1">
+<div class="h-[2px] w-full bg-slate-400"></div>
+<div class="h-[2px] w-2/3 bg-slate-400"></div>
+<div class="h-[2px] w-1/2 bg-slate-400"></div>
+</div>
+</div>
+</main>
+<!-- Floating Command Anchor (Subtle) -->
+<div class="fixed bottom-10 left-1/2 -translate-x-1/2 z-50 flex items-center gap-4 px-6 py-3 bg-surface/60 backdrop-blur-xl rounded-full border border-outline-variant/10 shadow-2xl">
+<span class="text-[10px] font-bold text-slate-400 tracking-tighter">PRESS <kbd class="px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface border border-slate-300 mx-1">CMD</kbd> + <kbd class="px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface border border-slate-300 mx-1">K</kbd> FOR COMMANDS</span>
+</div>
+</body></html>
