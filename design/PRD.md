@@ -1,168 +1,141 @@
-**Product Requirements Document (PRD)**
-**Product Name:** ContextOS – The Agentic To-Do & Execution Workspace
+# PRD — Context-OS (pruned for Ralph demo)
+
+**Branch:** `buildclub/ralph` (the state we're building *toward*)
+**Source:** originally full PRD from `buildclub/design`, trimmed for the live demo. Full version preserved on `buildclub/design`.
 
 ---
 
-## 1. Product Overview
+## What we're building
 
-ContextOS is a next-generation productivity platform that transforms traditional to-do lists into an **intelligent execution system**. Instead of static task lists, ContextOS integrates **context, AI agents, and workflow automation** to help users focus on the **next best action** and complete work faster.
+A single-user to-do workspace. Manual task entry, nested sub-tasks, a Today view, and a focus mode with a Pomodoro timer. Plus the DevOps plumbing to ship it.
 
-Most productivity apps fail because they require users to manually manage tasks, priorities, tags, and schedules. ContextOS removes this friction by automatically organizing tasks, connecting relevant resources, and suggesting optimal work sequences.
+This is deliberately narrow. Talk 3 (Ellie) adds the agentic layer on top — AI-driven decomposition, "do this next" suggestions — so every story here leaves clean seams.
 
-The core principle is simple: **tasks should not exist in isolation**. Every task should automatically gather the **context, tools, files, and AI capabilities required to execute it**.
+## Stack
 
----
+- Next.js 16 (App Router), TypeScript strict
+- Supabase (hosted, free tier) via `@supabase/ssr`
+- Tailwind v4
+- pnpm
 
-## 2. Problem Statement
+## Quality gate (must pass before each commit)
 
-Traditional productivity tools suffer from several limitations:
-
-* Tasks lack **context** (documents, conversations, tools).
-* Users must manually prioritize and schedule work.
-* Task lists become overwhelming and difficult to manage.
-* AI tools exist separately instead of being integrated into workflows.
-* Productivity tools rarely assist in **execution**, only in **planning**.
-
-As a result, users maintain task lists but still struggle to **translate plans into completed work**.
+```bash
+pnpm typecheck && pnpm lint && pnpm test
+```
 
 ---
 
-## 3. Product Vision
+## User stories
 
-ContextOS aims to become the **execution layer for modern work**. It combines task management, contextual integrations, and AI agents into a single interface that guides users toward completing meaningful work efficiently.
+### US-001 — Tasks schema in Supabase
 
-Instead of managing tasks, users interact with an intelligent system that continuously answers:
+**As a developer**, I need a `tasks` table so the app has somewhere to persist data.
 
-**“What should I do next?”**
+**Acceptance criteria:**
+- SQL migration at `web/supabase/migrations/001_tasks.sql` with columns: `id uuid PK`, `title text not null`, `notes text`, `due_date timestamptz`, `status text default 'open' check (status in ('open','done'))`, `parent_id uuid null references tasks(id) on delete cascade`, `created_at timestamptz default now()`
+- Indexes on `parent_id` and `due_date`
+- `supabase db push` applies cleanly against the linked project
+- `pnpm typecheck` passes
 
----
-
-## 4. Core Features
-
-### 4.1 Context-Aware Tasks (Killer Feature)
-
-Every task automatically aggregates relevant information and tools.
-
-When a task is created, ContextOS automatically connects:
-
-* Documents (Google Drive, Notion)
-* Communication threads (Slack, email)
-* Calendar events
-* Links and research materials
-
-Example:
-Task: “Prepare investor pitch”
-
-Automatically linked context:
-
-* Pitch deck
-* Investor meeting calendar
-* Research notes
-* Contact list
-
-This removes the need for users to manually gather resources before starting work.
+**Priority:** 1 · **Passes:** false
 
 ---
 
-### 4.2 AI Task Decomposition (Killer Feature)
+### US-002 — Add a task
 
-Large or vague tasks are automatically broken down into actionable steps using AI.
+**As a user**, I want to add a top-level task with a title, optional notes, and an optional due date, so I can start capturing work.
 
-Example:
+**Acceptance criteria:**
+- An "Add task" form is visible on the Today view
+- Fields: title (required), notes (optional), due_date (optional date picker)
+- Submit calls a server action that inserts into Supabase
+- After submit, the row appears in the task list without a full page reload (use `revalidatePath`)
+- Empty title is rejected client-side and server-side
+- `pnpm typecheck && pnpm lint && pnpm test` passes
 
-Input:
-“Launch new product”
-
-Generated subtasks:
-
-* Conduct market research
-* Define product requirements
-* Design UI prototype
-* Build MVP
-* Conduct user testing
-
-This feature helps users overcome **planning paralysis** and enables immediate progress.
+**Priority:** 2 · **Passes:** false
 
 ---
 
-### 4.3 Intelligent Task Scheduling (Killer Feature)
+### US-003 — Sub-tasks
 
-ContextOS automatically schedules tasks based on:
+**As a user**, I want to attach sub-tasks to a parent task so I can break work down.
 
-* estimated duration
-* user productivity patterns
-* calendar availability
-* task difficulty
+**Acceptance criteria:**
+- Each task row has a "+ subtask" button
+- Clicking it reveals an inline input; submitting creates a child task with `parent_id` set
+- Sub-tasks render nested under their parent (one level deep is enough)
+- Deleting a parent cascades to children (rely on the FK constraint)
+- `pnpm typecheck && pnpm lint && pnpm test` passes
 
-The system dynamically reorganizes daily tasks to ensure optimal productivity.
-
-Example recommendation:
-
-“You have a 30-minute focus window before your meeting. Suggested task: finalize report summary.”
+**Priority:** 3 · **Passes:** false
 
 ---
 
-### 4.4 Focus Mode
+### US-004 — Left-nav filters
 
-When a user starts a task, ContextOS launches **Focus Mode**, displaying only:
+**As a user**, I want to switch between Today / Upcoming / All so I can focus on what's relevant.
 
-* the active task
-* relevant context
-* AI assistance
-* a focus timer
+**Acceptance criteria:**
+- Left-nav has three items: **Today**, **Upcoming**, **All**
+- Selection is reflected in the URL as `?filter=today|upcoming|all` (default: today)
+- **Today**: tasks where `due_date::date = current_date`
+- **Upcoming**: tasks where `due_date::date > current_date`
+- **All**: every task, no date filter
+- Active filter is visually highlighted
+- `pnpm typecheck && pnpm lint && pnpm test` passes
 
-Distractions and unnecessary interface elements are removed to maintain deep concentration.
-
----
-
-### 4.5 Agentic Task Execution
-
-Tasks can be assigned to AI agents that assist with execution.
-
-Examples:
-
-Task: “Collect GDP data for report”
-
-AI agent workflow:
-
-* search trusted sources
-* compile statistics
-* generate summary table
-* provide references
-
-Users review and finalize outputs instead of performing repetitive research tasks.
+**Priority:** 4 · **Passes:** false
 
 ---
 
-## 5. User Experience Design
+### US-005 — Focus mode with Pomodoro
 
-The interface is structured around three layers:
+**As a user**, I want to click a task and enter a focused view with a 25-minute timer so I can actually do the work.
 
-**1. Today Dashboard**
-Shows the user’s most important tasks and recommended next action.
+**Acceptance criteria:**
+- Clicking a task title routes to `/focus/[id]`
+- Focus view shows only the task title, notes, and a large 25:00 timer
+- Controls: **Start** · **Pause** · **Reset**
+- Timer ticks down every second; reaching 00:00 shows "Done — take a break" (no sound — keep it silent for the demo)
+- Timer state is client-side only (no persistence)
+- **ESC** or a visible "Back" button exits to the previous view
+- `pnpm typecheck && pnpm lint && pnpm test` passes
 
-**2. Context Panel**
-Displays resources, files, subtasks, and AI capabilities linked to each task.
-
-**3. Intelligence Layer**
-Background system that analyzes productivity patterns and optimizes schedules.
-
-The design prioritizes **clarity, minimal cognitive load, and fast task execution**.
-
----
-
-## 6. Success Metrics
-
-Key performance indicators include:
-
-* task completion rate
-* average time to complete tasks
-* user retention
-* daily active usage
-* AI-assisted task completion percentage
+**Priority:** 5 · **Passes:** false
 
 ---
 
-## 7. Long-Term Vision
+### US-006 — CI and release workflows
 
-ContextOS aims to evolve into a **personal operating system for productivity**, where humans and AI agents collaborate seamlessly to plan, execute, and complete complex work.
+**As a developer**, I want GitHub Actions workflows so the quality gate runs automatically and releases are reproducible.
+
+**Acceptance criteria:**
+- `.github/workflows/ci.yml` — on push to any branch and on PRs to `main`:
+  - Runs on `ubuntu-latest`, Node 20, pnpm via corepack
+  - Steps: checkout, install (`pnpm install --frozen-lockfile` in `web/`), `pnpm -C web typecheck`, `pnpm -C web lint`, `pnpm -C web test`
+  - Skips gracefully if `web/package.json` doesn't exist yet
+- `.github/workflows/release.yml` — on push of a tag matching `v*`:
+  - Runs the same gate first
+  - On success, uses `softprops/action-gh-release@v2` (or equivalent) to create a GitHub Release with auto-generated notes
+- Both workflows pass on a trivial no-op PR against `main`
+- `pnpm typecheck && pnpm lint && pnpm test` passes
+
+**Priority:** 6 · **Passes:** false
+
+---
+
+## Branch name for Ralph to work on
+
+`ralph/context-os-manual` — Ralph creates this when it starts.
+
+## Out of scope (explicit)
+
+- Authentication / multi-user
+- Agent-assisted decomposition (talk 3)
+- "Suggested next task" (talk 3)
+- Notifications, reminders, real-time sync
+- Drag-and-drop reordering
+- Editing or deleting tasks after creation (beyond cascading sub-task deletion)
+- Docker images, custom domains, or any deploy target other than Vercel
