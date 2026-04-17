@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Ship it with Ralph — Chris Raethke</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal:   #14b8a6;
+    --red:    #f87171;
+    --orange: #fb923c;
+    --purple: #a78bfa;
+    --green:  #34d399;
+    --bg:         #09090b;
+    --bg-alt:     #000;
+    --fg:         #fafafa;
+    --fg-muted:   #9ca3af;
+    --fg-faint:   #4b5563;
+    --rule:       #1f1f23;
+    --code-bg:    #111114;
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      --bg:         #fafafa;
+      --bg-alt:     #ffffff;
+      --fg:         #09090b;
+      --fg-muted:   #4b5563;
+      --fg-faint:   #9ca3af;
+      --rule:       #e5e7eb;
+      --code-bg:    #f3f4f6;
+    }
+  }
+  :root[data-theme="light"] {
+    --bg:         #fafafa;
+    --bg-alt:     #ffffff;
+    --fg:         #09090b;
+    --fg-muted:   #4b5563;
+    --fg-faint:   #9ca3af;
+    --rule:       #e5e7eb;
+    --code-bg:    #f3f4f6;
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg); color: var(--fg);
+    font-family: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    letter-spacing: -0.02em;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  code, pre { font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0; }
+
+  .deck { position: relative; width: 100vw; height: 100vh; }
+  .slide {
+    position: absolute; inset: 0;
+    padding: 6vh 8vw;
+    display: flex; flex-direction: column; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity 240ms ease;
+  }
+  .slide.active { opacity: 1; pointer-events: auto; }
+  .slide h1, .slide h2, .slide h3, .slide p, .slide ul { margin: 0; }
+
+  .label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--section);
+    margin-bottom: 3vh;
+  }
+  .headline {
+    font-size: clamp(2.4rem, 6.5vw, 6.4rem);
+    font-weight: 400;
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+    max-width: 22ch;
+  }
+  .headline em { font-style: normal; color: var(--section); }
+  .subtitle {
+    margin-top: 3.2vh;
+    font-size: clamp(1rem, 1.6vw, 1.5rem);
+    color: var(--fg-muted);
+    font-weight: 400;
+    max-width: 56ch;
+    line-height: 1.45;
+  }
+
+  .bullets {
+    margin-top: 4vh;
+    list-style: none; padding: 0;
+    display: grid; gap: 2.2vh;
+    max-width: 60ch;
+  }
+  .bullets li {
+    font-size: clamp(1rem, 1.4vw, 1.4rem);
+    color: var(--fg-muted);
+    padding-left: 1.2rem;
+    position: relative;
+    line-height: 1.4;
+  }
+  .bullets li::before {
+    content: ""; position: absolute; left: 0; top: 0.7em;
+    width: 0.5rem; height: 1px; background: var(--section);
+  }
+  .bullets li strong { color: var(--fg); font-weight: 600; }
+
+  .split { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 6vw; align-items: center; }
+
+  .big {
+    font-size: clamp(3.4rem, 10vw, 9rem);
+    font-weight: 400;
+    line-height: 0.92;
+    letter-spacing: -0.04em;
+    max-width: 16ch;
+  }
+
+  .code-surface {
+    margin-top: 4vh;
+    background: var(--code-bg);
+    border-radius: 12px;
+    padding: 2.5vh 2.5vw;
+    font-size: clamp(0.85rem, 1.15vw, 1.1rem);
+    line-height: 1.65;
+    color: var(--fg);
+    max-width: 80ch;
+    overflow: auto;
+    border: 1px solid var(--rule);
+  }
+  .code-surface .c { color: var(--fg-faint); }
+  .code-surface .k { color: var(--section); }
+  .code-surface .s { color: var(--green); }
+
+  .recap-cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 3vw; margin-top: 5vh; }
+  .recap-cols .col { border-top: 1px solid var(--rule); padding-top: 2vh; }
+  .recap-cols .col .tag {
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--col-color);
+  }
+  .recap-cols .col h3 {
+    font-size: clamp(1.2rem, 2vw, 1.8rem); font-weight: 500; margin-top: 1vh; line-height: 1.15;
+  }
+  .recap-cols .col p { color: var(--fg-muted); margin-top: 1.4vh; font-size: 0.95rem; line-height: 1.45; }
+
+  .resources { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3vw 5vw; margin-top: 4vh; max-width: 80ch; }
+  .resources .group .heading {
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-faint);
+    margin-bottom: 1.4vh;
+  }
+  .resources a {
+    display: block; color: var(--fg); text-decoration: none;
+    font-size: 1.05rem; padding: 0.6vh 0; border-bottom: 1px solid var(--rule);
+  }
+  .resources a:hover { color: var(--section); }
+  .resources a .host { color: var(--fg-faint); font-size: 0.85rem; margin-left: 0.6rem; }
+
+  .title-block { max-width: 36ch; }
+  .title-block .meta {
+    margin-top: 4vh; display: flex; gap: 2vw; font-size: 0.95rem; color: var(--fg-muted);
+  }
+  .title-block .meta span strong { color: var(--fg); font-weight: 500; }
+
+  .section-divider {
+    display: grid; grid-template-columns: 1fr 1fr; align-items: stretch;
+    padding: 0;
+  }
+  .section-divider .left { padding: 6vh 8vw; display: flex; flex-direction: column; justify-content: center; }
+  .section-divider .right {
+    background: radial-gradient(ellipse at 30% 40%, var(--section), transparent 60%),
+                radial-gradient(ellipse at 70% 70%, var(--section), transparent 60%),
+                var(--bg-alt);
+    opacity: 0.95;
+  }
+
+  .progress {
+    position: fixed; left: 0; bottom: 0; height: 3px;
+    background: var(--fg); transition: width 240ms ease; z-index: 5;
+    mix-blend-mode: difference;
+  }
+
+  .chrome {
+    position: fixed; top: 2vh; right: 2vw; z-index: 10;
+    display: flex; gap: 0.6rem; align-items: center;
+  }
+  .chrome button {
+    background: transparent; color: var(--fg-muted);
+    border: 1px solid var(--rule); border-radius: 999px;
+    padding: 0.4rem 0.8rem; font-size: 0.78rem; cursor: pointer;
+    font-family: inherit; letter-spacing: 0;
+    transition: color 120ms, border-color 120ms;
+  }
+  .chrome button:hover { color: var(--fg); border-color: var(--fg-muted); }
+  .counter {
+    color: var(--fg-faint); font-size: 0.8rem; font-family: "JetBrains Mono", monospace;
+    padding: 0.4rem 0.8rem;
+  }
+
+  kbd {
+    font-family: "JetBrains Mono", monospace; font-size: 0.75rem;
+    border: 1px solid var(--rule); border-bottom-width: 2px;
+    padding: 0.1rem 0.4rem; border-radius: 4px; color: var(--fg-muted);
+  }
+
+  .hint {
+    position: fixed; bottom: 2vh; left: 2vw; z-index: 6;
+    color: var(--fg-faint); font-size: 0.75rem;
+  }
+</style>
+</head>
+<body>
+
+<div class="chrome">
+  <span class="counter" id="counter">1 / 16</span>
+  <button id="themeToggle" title="Toggle theme">auto</button>
+</div>
+<div class="hint"><kbd>←</kbd> <kbd>→</kbd> or <kbd>space</kbd></div>
+
+<div class="deck" id="deck">
+
+  <!-- 1. Title -->
+  <section class="slide active" style="--section: var(--teal)">
+    <div class="title-block">
+      <div class="label">Talk 2 of 3 · Brisbane · 20 Apr 2026</div>
+      <h1 class="headline">Ship it with <em>Ralph</em>.</h1>
+      <p class="subtitle">Turning a PRD into working code while you walk to the bar.</p>
+      <div class="meta">
+        <span><strong>Chris Raethke</strong></span>
+        <span>@teamcadence.ai</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Goals -->
+  <section class="slide" style="--section: var(--teal)">
+    <div class="label">What you'll leave with</div>
+    <h1 class="headline">Three takeaways.</h1>
+    <ul class="bullets">
+      <li><strong>Prep the loop.</strong> The agent is only as good as the context you hand it.</li>
+      <li><strong>CLAUDE.md is the manual.</strong> One file decides whether your agent ships or drifts.</li>
+      <li><strong>Trust the iterations.</strong> Small stories + a quality gate beats a megaprompt.</li>
+    </ul>
+  </section>
+
+  <!-- 3. Section divider: Context -->
+  <section class="slide section-divider" style="--section: var(--red)">
+    <div class="left">
+      <div class="label">The Problem</div>
+      <h1 class="headline">Vibes don't deploy.</h1>
+      <p class="subtitle">AI can write code. So why are our apps still prototypes?</p>
+    </div>
+    <div class="right"></div>
+  </section>
+
+  <!-- 4. The tension -->
+  <section class="slide" style="--section: var(--red)">
+    <div class="label">The tension</div>
+    <h1 class="headline">Prototype to production is still <em>a cliff</em>.</h1>
+    <ul class="bullets">
+      <li>Generated code looks fine — until it doesn't compile against your stack.</li>
+      <li>One megaprompt = one shot. If it misses, you rewrite from scratch.</li>
+      <li>No tests. No conventions. No memory of what you already decided.</li>
+    </ul>
+  </section>
+
+  <!-- 5. Meet Ralph -->
+  <section class="slide" style="--section: var(--red)">
+    <div class="label">Meet Ralph</div>
+    <h1 class="headline">An autonomous loop. <em>One story at a time.</em></h1>
+    <p class="subtitle">snarktank/ralph — picks the next unchecked story in your PRD, implements it, runs your tests, commits if they pass, repeats.</p>
+    <div class="code-surface"><pre style="margin:0">./scripts/ralph/ralph.sh --tool claude <span class="c"># default: 10 iterations</span></pre></div>
+  </section>
+
+  <!-- 6. Section divider: What Ralph Reads -->
+  <section class="slide section-divider" style="--section: var(--orange)">
+    <div class="left">
+      <div class="label">Part 1 — Prep</div>
+      <h1 class="headline">What Ralph <em>reads</em>.</h1>
+      <p class="subtitle">Three files decide everything. Get these right, the rest is watching a progress bar.</p>
+    </div>
+    <div class="right"></div>
+  </section>
+
+  <!-- 7. CLAUDE.md -->
+  <section class="slide" style="--section: var(--orange)">
+    <div class="label">File #1</div>
+    <h1 class="headline"><code>CLAUDE.md</code> — the operating manual.</h1>
+    <ul class="bullets">
+      <li><strong>Stack.</strong> Next.js, Supabase, Tailwind, pnpm. Non-negotiables.</li>
+      <li><strong>Conventions.</strong> Server components by default. No <code>any</code>. No commented-out code.</li>
+      <li><strong>Quality gate.</strong> <code>pnpm typecheck &amp;&amp; pnpm lint &amp;&amp; pnpm test</code>.</li>
+      <li><strong>Scope discipline.</strong> Implement the current story. Nothing more.</li>
+    </ul>
+  </section>
+
+  <!-- 8. agent-docs -->
+  <section class="slide" style="--section: var(--orange)">
+    <div class="label">File #2 (a folder, really)</div>
+    <h1 class="headline"><code>agent-docs/</code> — the handbook.</h1>
+    <div class="code-surface"><pre style="margin:0">agent-docs/
+├── architecture.md   <span class="c">folder layout, rendering model, seams</span>
+├── database.md       <span class="c">supabase schema + access rules</span>
+├── language.md       <span class="c">TS / Next / React conventions</span>
+├── design.md         <span class="c">how to apply design/DESIGN.md</span>
+├── deployment.md     <span class="c">vercel + env vars</span>
+└── testing.md        <span class="c">vitest, playwright, CI gate</span></pre></div>
+  </section>
+
+  <!-- 9. PRD -->
+  <section class="slide" style="--section: var(--orange)">
+    <div class="label">File #3</div>
+    <h1 class="headline"><code>PRD.md</code> → <code>prd.json</code></h1>
+    <p class="subtitle">Stories with <code>passes: false</code>. Ralph picks, implements, flips to <code>true</code>.</p>
+    <div class="code-surface"><pre style="margin:0">{
+  <span class="k">"id"</span>: <span class="s">"US-002"</span>,
+  <span class="k">"title"</span>: <span class="s">"Add-task form"</span>,
+  <span class="k">"acceptanceCriteria"</span>: [
+    <span class="s">"Form persists to supabase via server action"</span>,
+    <span class="s">"Row appears in list"</span>,
+    <span class="s">"Typecheck passes"</span>
+  ],
+  <span class="k">"priority"</span>: 2,
+  <span class="k">"passes"</span>: <span class="k">false</span>
+}</pre></div>
+  </section>
+
+  <!-- 10. Section divider: The Loop -->
+  <section class="slide section-divider" style="--section: var(--purple)">
+    <div class="left">
+      <div class="label">Part 2 — Run</div>
+      <h1 class="headline">The <em>loop</em>.</h1>
+      <p class="subtitle">Ralph does the same five things, over and over, until the PRD is green.</p>
+    </div>
+    <div class="right"></div>
+  </section>
+
+  <!-- 11. The loop -->
+  <section class="slide" style="--section: var(--purple)">
+    <div class="label">Per iteration</div>
+    <h1 class="headline">Pick · build · test · commit · mark.</h1>
+    <ul class="bullets">
+      <li><strong>1. Pick.</strong> Highest priority story where <code>passes: false</code>.</li>
+      <li><strong>2. Build.</strong> Implement that story. Nothing adjacent.</li>
+      <li><strong>3. Test.</strong> Typecheck + lint + unit tests. Any failure → retry.</li>
+      <li><strong>4. Commit.</strong> Conventional message, one story per commit.</li>
+      <li><strong>5. Mark.</strong> Flip <code>passes: true</code>. Next.</li>
+    </ul>
+  </section>
+
+  <!-- 12. Live demo: iteration 1 -->
+  <section class="slide" style="--section: var(--purple)">
+    <div class="label">Demo time</div>
+    <h1 class="headline">Live: one iteration.</h1>
+    <p class="subtitle">Watch story US-001 go from <code>false</code> to <code>true</code>. Back to the deck if the laptop catches fire.</p>
+    <div class="code-surface"><pre style="margin:0">git checkout buildclub/design-prune
+./scripts/ralph/ralph.sh --tool claude 1</pre></div>
+  </section>
+
+  <!-- 13. Section divider: Prepared Earlier -->
+  <section class="slide section-divider" style="--section: var(--green)">
+    <div class="left">
+      <div class="label">Part 3 — Ship</div>
+      <h1 class="headline">Here's one I <em>prepared earlier</em>.</h1>
+      <p class="subtitle">10 iterations. 5 stories. Working app.</p>
+    </div>
+    <div class="right"></div>
+  </section>
+
+  <!-- 14. What 10 iterations buys -->
+  <section class="slide" style="--section: var(--green)">
+    <div class="label">Branch: buildclub/ralph</div>
+    <h1 class="headline">What 10 iterations buys.</h1>
+    <ul class="bullets">
+      <li><strong>US-001</strong> Supabase <code>tasks</code> schema + migration.</li>
+      <li><strong>US-002</strong> Add-task form → server action → row in DB.</li>
+      <li><strong>US-003</strong> Sub-tasks via <code>parent_id</code>.</li>
+      <li><strong>US-004</strong> Left-nav filters: Today · Upcoming · All.</li>
+      <li><strong>US-005</strong> Focus mode with 25-min Pomodoro timer.</li>
+    </ul>
+  </section>
+
+  <!-- 15. Deploy -->
+  <section class="slide" style="--section: var(--green)">
+    <div class="label">The moment of truth</div>
+    <h1 class="headline">Deploy it live.</h1>
+    <div class="code-surface"><pre style="margin:0">cd web
+vercel login
+vercel
+<span class="c"># → https://context-os-&lt;hash&gt;.vercel.app</span></pre></div>
+  </section>
+
+  <!-- 16. Recap -->
+  <section class="slide" style="--section: var(--teal)">
+    <div class="label">Recap</div>
+    <h1 class="headline">Three takeaways, revisited.</h1>
+    <div class="recap-cols">
+      <div class="col" style="--col-color: var(--orange)">
+        <div class="tag">Prep</div>
+        <h3>The agent reads before it writes.</h3>
+        <p>CLAUDE.md + agent-docs + a tight PRD is 80% of the work.</p>
+      </div>
+      <div class="col" style="--col-color: var(--purple)">
+        <div class="tag">Loop</div>
+        <h3>One story, one commit.</h3>
+        <p>Small passes compound. Megaprompts don't.</p>
+      </div>
+      <div class="col" style="--col-color: var(--green)">
+        <div class="tag">Ship</div>
+        <h3>The gate does the trust.</h3>
+        <p>Typecheck + lint + tests = you don't need to babysit it.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 17. Resources -->
+  <section class="slide" style="--section: var(--teal)">
+    <div class="label">Take this home</div>
+    <h1 class="headline">Resources.</h1>
+    <div class="resources">
+      <div class="group">
+        <div class="heading">Tools</div>
+        <a href="https://github.com/snarktank/ralph">snarktank/ralph <span class="host">github.com</span></a>
+        <a href="https://docs.claude.com/en/docs/claude-code">Claude Code docs <span class="host">anthropic</span></a>
+        <a href="https://supabase.com/docs/guides/auth/server-side/nextjs">Supabase + Next.js <span class="host">supabase.com</span></a>
+      </div>
+      <div class="group">
+        <div class="heading">This talk</div>
+        <a href="https://github.com/jxspam/Context-OS">jxspam/Context-OS <span class="host">github.com</span></a>
+        <a href="https://luma.com/yo5jatjk">Meetup page <span class="host">luma.com</span></a>
+        <a href="https://mastra.ai">Mastra (up next, talk 3) <span class="host">mastra.ai</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 18. Handoff -->
+  <section class="slide" style="--section: var(--teal)">
+    <h1 class="headline">Over to <em>Ellie</em>.</h1>
+    <p class="subtitle">Ralph gave us the bones. She'll give it a brain.</p>
+  </section>
+
+</div>
+
+<div class="progress" id="progress"></div>
+
+<script>
+  const slides  = Array.from(document.querySelectorAll('.slide'));
+  const counter = document.getElementById('counter');
+  const progress= document.getElementById('progress');
+  let i = 0;
+
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, idx) => s.classList.toggle('active', idx === i));
+    counter.textContent = (i + 1) + ' / ' + slides.length;
+    progress.style.width = ((i + 1) / slides.length * 100) + '%';
+    history.replaceState(null, '', '#' + (i + 1));
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); show(i + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(i - 1); }
+    else if (e.key === 'Home') { show(0); }
+    else if (e.key === 'End') { show(slides.length - 1); }
+  });
+
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('button, a, kbd, .chrome')) return;
+    show(i + (e.clientX > window.innerWidth / 2 ? 1 : -1));
+  });
+
+  const fromHash = parseInt((location.hash || '#1').slice(1), 10);
+  if (!Number.isNaN(fromHash)) show(fromHash - 1); else show(0);
+
+  // Theme toggle: auto (system) → dark → light → auto
+  const root = document.documentElement;
+  const btn  = document.getElementById('themeToggle');
+  const order = ['auto', 'dark', 'light'];
+  let themeIdx = order.indexOf(localStorage.getItem('theme') || 'auto');
+  if (themeIdx < 0) themeIdx = 0;
+  function applyTheme() {
+    const t = order[themeIdx];
+    if (t === 'auto') root.removeAttribute('data-theme');
+    else root.setAttribute('data-theme', t);
+    btn.textContent = t;
+    localStorage.setItem('theme', t);
+  }
+  btn.addEventListener('click', () => { themeIdx = (themeIdx + 1) % order.length; applyTheme(); });
+  applyTheme();
+</script>
+
+</body>
+</html>
