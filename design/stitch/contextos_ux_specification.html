@@ -1,0 +1,71 @@
+# ContextOS Frontend / UI / UX Specification
+**Design System: The Kinetic Sanctuary**
+
+## 1. Interface Philosophy
+The frontend of ContextOS must embody the **Kinetic Sanctuary** principle: a calm, editorial workspace that supports deep focus within complex AI-assisted workflows. The interface must reject traditional cluttered SaaS dashboards and instead rely on tonal layering, negative space, and atmospheric depth to create an environment that feels expansive yet controlled.
+
+The UI should feel like a high-end physical workspace rather than a typical software tool. Panels and surfaces should emerge naturally through tonal transitions rather than structural lines or rigid borders.
+
+The overall experience must evoke three emotional states:
+- **Calm** — minimal visual noise
+- **Clarity** — obvious next actions
+- **Flow** — seamless transition between tasks and AI assistance
+
+## 2. Layout Architecture
+The application layout follows a three-zone workspace structure built using the system’s surface hierarchy.
+
+### Primary Canvas
+The main canvas uses the surface background (#ffffff) as the base layer. This allows the user's work and content to visually dominate the interface.
+
+### Left Navigation Workspace
+- Placed on `surface-container-low`.
+- Includes: Today, Upcoming, Projects, Insights, Settings.
+- Navigation items are vertically spaced with generous padding. No dividers. Separation occurs purely through background tonal differences.
+- Icons: Monoline SVG, 1.5pt stroke. Inactive: `on_surface_variant`. Active: `primary` (#fc8f3f).
+
+### Central Execution Workspace
+- The primary interaction space.
+- Displays: Today's tasks, AI suggested next task, task progress.
+- Task Cards: `surface-container-high`, moderate rounding (theme value 2), no borders, asymmetrical padding (top padding slightly larger). 
+- Cards should feel like objects resting on the workspace.
+- Rule of Zero Dividers: use vertical spacing instead of separators.
+
+### Right Context Intelligence Panel
+- Sits on `surface-container-low` with nested context cards using `surface-container-highest`.
+- Displays: Linked documents, conversation threads, calendar events, AI actions.
+- Each context item appears as a small card with icon + label.
+
+## 3. Interaction Model
+### Command Palette (CMD + K)
+- Floating glass overlay using `surface-variant`.
+- 12px backdrop blur.
+- Ambient shadow: `box-shadow: 0 20px 50px rgba(0,0,0,0.3)`.
+- Used for creating tasks, searching context, and triggering AI actions.
+
+## 4. AI Interaction Components
+### Agentic Prompt Input (Focused Input)
+- **Default:** No border, `surface-container-low` background.
+- **Focused:** Background shifts to `surface-container-high`, subtle primary glow (≈2px blur).
+
+### Context Chips
+- Pill-shaped chips for tags, AI status, and linked sources.
+- `surface-container-highest` background, max rounding (theme value 3), `label-sm` typography.
+
+## 5. Motion & Animation
+- **Task Completion:** Card gently slides upward, checkmark fades in, surface brightens slightly.
+- **Logo Animation:** Abstract circular loop with three curved segments (tasks, context, AI orchestration) rotating independently. Organic and kinetic.
+
+## 6. Buttons & CTAs
+- **Primary AI Actions:** Adaptive Gradient (#fc8f3f → derived secondary_container). Resembles captured light. Text: `on_primary`.
+- **Secondary Buttons:** `surface-container-highest` background, ghost border (outline-variant at 15% opacity).
+- **Tertiary Actions:** Transparent background, primary text. Hover: `surface-bright` background shift.
+
+## 7. Typography Implementation
+- **Font:** Inter
+- **Hierarchy:** Display (onboarding), Headline (workspace titles), Body (task descriptions, 1.6 line height), Label (metadata/AI status).
+
+## 8. Focus Mode
+- Background slightly dims.
+- Active task card moves to center.
+- Context panel softened.
+- Timer ring appears around task title.

@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ContextOS | Kinetic Sanctuary</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-container": "#febe97",
+                        "surface-container-highest": "#e2e2e2",
+                        "inverse-primary": "#ffb688",
+                        "on-primary": "#ffffff",
+                        "surface-container": "#eeeeee",
+                        "on-surface-variant": "#564338",
+                        "surface-dim": "#dadada",
+                        "outline-variant": "#dcc1b2",
+                        "on-secondary-container": "#794b2c",
+                        "on-error": "#ffffff",
+                        "on-primary-container": "#683000",
+                        "secondary-fixed": "#ffdbc7",
+                        "surface-tint": "#974800",
+                        "on-error-container": "#93000a",
+                        "primary": "#974800",
+                        "surface-container-low": "#f3f3f3",
+                        "error": "#ba1a1a",
+                        "on-surface": "#1a1c1c",
+                        "on-primary-fixed-variant": "#733600",
+                        "secondary": "#835333",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed": "#b9eaff",
+                        "on-tertiary-container": "#004658",
+                        "inverse-on-surface": "#f1f1f1",
+                        "outline": "#897366",
+                        "background": "#f9f9f9",
+                        "secondary-fixed-dim": "#f8b992",
+                        "primary-container": "#fc8f3f",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed": "#311300",
+                        "tertiary-container": "#00bae6",
+                        "surface": "#f9f9f9",
+                        "inverse-surface": "#2f3131",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-fixed": "#001f29",
+                        "surface-bright": "#f9f9f9",
+                        "primary-fixed": "#ffdbc7",
+                        "surface-variant": "#e2e2e2",
+                        "surface-container-high": "#e8e8e8",
+                        "on-primary-fixed": "#311300",
+                        "on-secondary-fixed-variant": "#673c1e",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-fixed-variant": "#004d61",
+                        "tertiary": "#006781",
+                        "primary-fixed-dim": "#ffb688",
+                        "tertiary-fixed-dim": "#56d5ff",
+                        "on-background": "#1a1c1c"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; line-height: 1.6; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .tonal-stacking { background-color: #f3f3f3; }
+        .adaptive-gradient-bg { background: linear-gradient(135deg, #fc8f3f 0%, #febe97 100%); }
+        .glass-panel { background: rgba(249, 249, 249, 0.7); backdrop-filter: blur(12px); }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-secondary-container/30">
+<!-- Left Navigation Panel -->
+<aside class="fixed left-0 top-0 h-full w-64 bg-surface-container-low flex flex-col p-6 z-50 overflow-y-auto">
+<div class="mb-10 flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-gradient-to-br from-[#fc8f3f] to-[#febe97] flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">blur_on</span>
+</div>
+<div>
+<h1 class="text-xl font-bold tracking-tighter text-[#fc8f3f]">ContextOS</h1>
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant/60 font-semibold leading-none">Kinetic Sanctuary</p>
+</div>
+</div>
+<button class="mb-8 w-full adaptive-gradient-bg text-white py-3 px-4 rounded-xl flex items-center justify-center gap-2 font-semibold shadow-lg shadow-primary-container/20 hover:opacity-90 transition-all">
+<span class="material-symbols-outlined text-sm">add</span>
+<span class="text-sm">New Context</span>
+</button>
+<nav class="space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-[#fc8f3f] font-semibold bg-surface-container-high rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="text-sm">Today</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-[#e8e8e8] rounded-xl transition-colors group" href="#">
+<span class="material-symbols-outlined" data-icon="event_upcoming">event_upcoming</span>
+<span class="text-sm">Upcoming</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-[#e8e8e8] rounded-xl transition-colors group" href="#">
+<span class="material-symbols-outlined" data-icon="folder_open">folder_open</span>
+<span class="text-sm">Projects</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-[#e8e8e8] rounded-xl transition-colors group" href="#">
+<span class="material-symbols-outlined" data-icon="insights">insights</span>
+<span class="text-sm">Insights</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-[#e8e8e8] rounded-xl transition-colors group mt-auto" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="text-sm">Settings</span>
+</a>
+</nav>
+<div class="mt-auto pt-6 border-t border-outline-variant/10">
+<div class="flex items-center gap-3 px-2">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest overflow-hidden">
+<img alt="User Workspace Profile" class="w-full h-full object-cover" data-alt="portrait of a professional creative designer with soft natural lighting and a neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSCSjCPFWbwiTGuzpBEyV58yjUZ4WMjbYcyEU0MLS1LDuYRkuOiYTVdEXeOAHh2yeH9ZZAfu0XgHIw1TgQpsecTzI2PNclq4ghEdhKaUWyrXtM3KGa9Qc3Q1Lp8eIWfT_icWyVdKU1ncqZZNE_EF_ZtclCYVkHh25l2ywlG8NCb5XmO8rut3i457vcWvY-S76UZI9Sq3vtYLkNP12iqOctufTNpJijXQpIiYvQDKHQdp0lHAvRiPge8dEOJRfNkoDOeYMlGlLAOsA"/>
+</div>
+<div class="flex-1 overflow-hidden">
+<p class="text-sm font-bold truncate">Julian Vane</p>
+<p class="text-xs text-on-surface-variant truncate">Workspace Solo</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Top Navigation -->
+<header class="fixed top-0 right-0 left-64 h-16 glass-panel flex items-center justify-between px-10 z-40">
+<div class="flex items-center gap-8">
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-on-surface-variant/40">search</span>
+<input class="bg-surface-container-high/50 border-none rounded-full pl-10 pr-4 py-1.5 text-sm focus:ring-2 focus:ring-[#fc8f3f]/20 w-64 transition-all" placeholder="Search context..." type="text"/>
+</div>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-sm font-semibold text-[#fc8f3f] border-b-2 border-[#fc8f3f] pb-0.5" href="#">Focus</a>
+<a class="text-sm font-medium text-slate-600 hover:opacity-80 transition-opacity" href="#">Collaborate</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-600 hover:opacity-80">
+<span class="material-symbols-outlined" data-icon="bolt">bolt</span>
+</button>
+<button class="p-2 text-slate-600 hover:opacity-80 relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full border-2 border-surface"></span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-64 mr-80 pt-16 min-h-screen bg-surface p-10 flex flex-col">
+<!-- Zen Header -->
+<div class="mb-12 mt-4 max-w-3xl">
+<h2 class="text-4xl font-bold tracking-tight text-on-surface leading-tight mb-2">Good morning, Julian.</h2>
+<p class="text-lg text-on-surface-variant/80">You have 3 focus hours scheduled for the 'Sanctuary Design' project today.</p>
+</div>
+<!-- AI Suggested Task Section -->
+<section class="mb-12">
+<div class="bg-gradient-to-br from-surface-container-high/50 to-surface-container/30 p-8 rounded-[32px] relative overflow-hidden group">
+<div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+<div class="max-w-md">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-[#fc8f3f]" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="text-xs font-bold uppercase tracking-widest text-[#fc8f3f]">Suggested Next Task</span>
+</div>
+<h3 class="text-2xl font-semibold mb-3">Refine typography scale for the Kinetic Sanctuary design system</h3>
+<p class="text-sm text-on-surface-variant/80 leading-relaxed mb-6">Based on your recent focus on the design spec, finalizing the H1-H6 scales will unblock the engineering team.</p>
+<div class="flex items-center gap-4">
+<button class="adaptive-gradient-bg text-white px-6 py-2.5 rounded-full font-semibold text-sm transition-transform hover:scale-105 active:scale-95 shadow-lg shadow-primary-container/20">
+                                Start Focus Mode
+                            </button>
+<button class="text-on-surface-variant font-medium text-sm hover:underline underline-offset-4">Skip for later</button>
+</div>
+</div>
+<div class="hidden lg:block w-48 h-48 relative">
+<div class="absolute inset-0 bg-[#fc8f3f]/10 rounded-full blur-3xl group-hover:bg-[#fc8f3f]/20 transition-colors"></div>
+<img alt="Abstract creative flow" class="w-full h-full object-cover rounded-2xl shadow-xl rotate-3 group-hover:rotate-0 transition-transform duration-500" data-alt="minimalist abstract 3d rendering with flowing fluid shapes in soft orange and cream tones on a clean white background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-HK_dNHcTtnnmVCDg1iKGMbGb9FP7MemVCNn2uUXKhbfKuWkMXHF87XRCdfnlvpTU_ip_fcx_ezRLLIqmsAOSzYUk9C_E5LbsSLF5jjIHLPBAEu6lWgvjFNS8oo4qWnhsNkZ_o3OU4RzTxm9mJva-dMOW18LugQE65AtHbpHeAxf059_AbaSQ69nCIsDNV7hnPbXeZAvBb5O9VIunWyMbRovjn87vwHmKKdew5ro2mZI9R9Fysk-31C1VYUuhYJBdTi93L-F00dw"/>
+</div>
+</div>
+</div>
+</section>
+<!-- Today's Tasks Grid -->
+<section class="flex-grow">
+<div class="flex items-center justify-between mb-8">
+<h4 class="text-xl font-bold tracking-tight">Today's Tasks</h4>
+<div class="flex gap-2">
+<button class="bg-surface-container-highest px-3 py-1.5 rounded-full text-xs font-bold text-on-surface-variant hover:bg-surface-container transition-colors">All Tasks</button>
+<button class="px-3 py-1.5 rounded-full text-xs font-bold text-on-surface-variant/50 hover:bg-surface-container transition-colors">Completed</button>
+</div>
+</div>
+<!-- Asymmetric Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 pb-24">
+<div class="bg-surface-container-high p-6 rounded-3xl hover:translate-y-[-4px] transition-all duration-300 shadow-sm">
+<div class="flex justify-between items-start mb-10">
+<span class="bg-surface-container-highest p-2 rounded-xl text-[#fc8f3f]">
+<span class="material-symbols-outlined">edit_square</span>
+</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter bg-on-surface/5 px-2 py-1 rounded-md text-on-surface-variant">Design</span>
+</div>
+<h5 class="text-lg font-semibold mb-2">Review component library</h5>
+<p class="text-sm text-on-surface-variant leading-relaxed">Update the spacing tokens to reflect the new Sanctuary 'No-Line' philosophy.</p>
+</div>
+<div class="bg-surface-container-high p-6 rounded-3xl hover:translate-y-[-4px] transition-all duration-300 shadow-sm mt-8 md:mt-0">
+<div class="flex justify-between items-start mb-10">
+<span class="bg-surface-container-highest p-2 rounded-xl text-tertiary">
+<span class="material-symbols-outlined">groups</span>
+</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter bg-on-surface/5 px-2 py-1 rounded-md text-on-surface-variant">Meeting</span>
+</div>
+<h5 class="text-lg font-semibold mb-2">Sync with Engineering</h5>
+<p class="text-sm text-on-surface-variant leading-relaxed">Discuss the Tailwind implementation of glassmorphism and ambient shadows.</p>
+</div>
+<div class="bg-surface-container-high p-6 rounded-3xl hover:translate-y-[-4px] transition-all duration-300 shadow-sm">
+<div class="flex justify-between items-start mb-10">
+<span class="bg-surface-container-highest p-2 rounded-xl text-primary">
+<span class="material-symbols-outlined">description</span>
+</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter bg-on-surface/5 px-2 py-1 rounded-md text-on-surface-variant">Content</span>
+</div>
+<h5 class="text-lg font-semibold mb-2">Draft Q3 Strategy</h5>
+<p class="text-sm text-on-surface-variant leading-relaxed">Focus on user expansion and the new 'Context Bridge' feature set.</p>
+</div>
+<div class="bg-surface-container-high p-6 rounded-3xl hover:translate-y-[-4px] transition-all duration-300 shadow-sm mt-8 md:mt-0">
+<div class="flex justify-between items-start mb-10">
+<span class="bg-surface-container-highest p-2 rounded-xl text-secondary">
+<span class="material-symbols-outlined">mail</span>
+</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter bg-on-surface/5 px-2 py-1 rounded-md text-on-surface-variant">Admin</span>
+</div>
+<h5 class="text-lg font-semibold mb-2">Clear primary inbox</h5>
+<p class="text-sm text-on-surface-variant leading-relaxed">Sort priority requests and archive finalized project threads.</p>
+</div>
+</div>
+</section>
+<!-- Prompt Input Bar -->
+<div class="fixed bottom-8 left-1/2 -translate-x-1/2 w-full max-w-2xl px-6 z-50">
+<div class="bg-surface-container-lowest/80 backdrop-blur-xl border border-outline-variant/20 rounded-2xl shadow-2xl p-2 flex items-center gap-3">
+<div class="flex-shrink-0 ml-2">
+<span class="material-symbols-outlined text-[#fc8f3f]" style="font-variation-settings: 'FILL' 1;">colors_spark</span>
+</div>
+<input class="flex-grow bg-transparent border-none focus:ring-0 text-sm py-3 text-on-surface" placeholder="Ask ContextOS to find a file or summarize your day..." type="text"/>
+<button class="bg-[#fc8f3f] text-white p-2 rounded-xl hover:opacity-90 transition-all flex items-center justify-center">
+<span class="material-symbols-outlined">arrow_upward</span>
+</button>
+</div>
+</div>
+</main>
+<!-- Right Context Panel -->
+<aside class="fixed right-0 top-0 h-full w-80 bg-surface-container-low flex flex-col p-8 z-40 overflow-y-auto">
+<div class="mb-10">
+<h4 class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant/50 mb-6">Upcoming Events</h4>
+<div class="space-y-4">
+<div class="bg-surface-container-highest/40 p-4 rounded-2xl flex gap-4">
+<div class="text-center bg-surface-container-highest p-2 rounded-xl h-fit min-w-[3.5rem]">
+<p class="text-[10px] font-bold uppercase text-on-surface-variant/60 leading-none mb-1">Oct</p>
+<p class="text-lg font-black leading-none">24</p>
+</div>
+<div>
+<p class="text-xs font-bold leading-tight mb-1">Product Roadmap</p>
+<p class="text-[10px] text-on-surface-variant/70">11:00 AM — 12:30 PM</p>
+</div>
+</div>
+<div class="bg-surface-container-highest/40 p-4 rounded-2xl flex gap-4 opacity-60">
+<div class="text-center bg-surface-container-highest p-2 rounded-xl h-fit min-w-[3.5rem]">
+<p class="text-[10px] font-bold uppercase text-on-surface-variant/60 leading-none mb-1">Oct</p>
+<p class="text-lg font-black leading-none">25</p>
+</div>
+<div>
+<p class="text-xs font-bold leading-tight mb-1">Design Critique</p>
+<p class="text-[10px] text-on-surface-variant/70">02:00 PM — 03:00 PM</p>
+</div>
+</div>
+</div>
+</div>
+<div class="mb-10">
+<h4 class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant/50 mb-6">Linked Documents</h4>
+<div class="space-y-3">
+<a class="flex items-center gap-3 p-3 hover:bg-surface-container-high rounded-xl transition-colors group" href="#">
+<span class="material-symbols-outlined text-on-surface-variant/40 group-hover:text-[#fc8f3f]">description</span>
+<span class="text-xs font-medium truncate">Style_Guide_V2.pdf</span>
+</a>
+<a class="flex items-center gap-3 p-3 hover:bg-surface-container-high rounded-xl transition-colors group" href="#">
+<span class="material-symbols-outlined text-on-surface-variant/40 group-hover:text-[#fc8f3f]">table_chart</span>
+<span class="text-xs font-medium truncate">Budget_Forecast_Q4.xlsx</span>
+</a>
+<a class="flex items-center gap-3 p-3 hover:bg-surface-container-high rounded-xl transition-colors group" href="#">
+<span class="material-symbols-outlined text-on-surface-variant/40 group-hover:text-[#fc8f3f]">slideshow</span>
+<span class="text-xs font-medium truncate">Board_Pitch_Deck.pptx</span>
+</a>
+</div>
+</div>
+<div>
+<h4 class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant/50 mb-6">Recent Context</h4>
+<div class="rounded-2xl overflow-hidden mb-4">
+<img alt="Recent Collaboration" class="w-full grayscale hover:grayscale-0 transition-all duration-700" data-alt="close-up of a modern clean workspace with a notebook, a coffee cup, and soft window light filtering through blinds" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCaQ_o3pVjHaqwKoMyf28uMh9qGvzcBFOCdTi7t06tI5pDpJ3B-CGRCjWMg67GIzqnYoIS3oMvgkSYBIK1KqclQl6XkU2rTd23fYmT7-lSTvnKwERY7UjwsZzCEGVq23vPJTr7Q9kNUqXeFSKvlu_Y56G0aJK9LAJpj6wtbGFuSOQ77q6rCkk8euu8SSqApDWzRik6S-ZdWaBDWyOgXKtdtFwKOn8pilnsm4p1EGKUBXXCU-EuMcGGBRJotEyoUfjG44HCjZ2wVP8I"/>
+</div>
+<p class="text-[10px] text-on-surface-variant/70 italic leading-relaxed">"You were discussing the transition to the new Sanctuary system with Sarah yesterday at 4 PM."</p>
+</div>
+</aside>
+</body></html>
