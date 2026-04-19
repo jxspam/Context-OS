@@ -63,6 +63,7 @@ function Install-Jq {
     if (Test-Command jq) { Write-Skip "jq $(jq --version)"; return }
     Write-Info "installing jq"
     winget install --id jqlang.jq -e --accept-package-agreements --accept-source-agreements
+    $env:Path = [Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [Environment]::GetEnvironmentVariable("Path","User")
 }
 
 function Install-Supabase {

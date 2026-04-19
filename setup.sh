@@ -86,6 +86,7 @@ install_jq() {
   if [ "$OS" = "macos" ]; then
     brew install jq
   else
+    sudo apt-get update
     sudo apt-get install -y jq
   fi
 }
