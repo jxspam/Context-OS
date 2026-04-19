@@ -80,6 +80,16 @@ install_ralph() {
   chmod +x "$ralph_dir"/*.sh 2>/dev/null || true
 }
 
+install_jq() {
+  if have jq; then skip "jq $(jq --version)"; return; fi
+  info "installing jq"
+  if [ "$OS" = "macos" ]; then
+    brew install jq
+  else
+    sudo apt-get install -y jq
+  fi
+}
+
 install_supabase() {
   if have supabase; then skip "supabase $(supabase --version)"; return; fi
   info "installing Supabase CLI"
@@ -130,6 +140,7 @@ main() {
   install_pnpm
   install_gh
   install_claude
+  install_jq
   install_ralph
   install_supabase
   install_vercel
