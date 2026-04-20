@@ -45,7 +45,7 @@ It will prompt you for your Supabase **Project URL** and **anon key** and drop t
 |---|---|---|
 | `main` | — | Clone point. README + setup scripts only. |
 | `buildclub/design` | **Jax — Design** | Stitch output + full PRD. End of talk 1. |
-| `buildclub/design-prune` | (bridge) | Full PRD trimmed to 5 stories. Start of talk 2. |
+| `buildclub/design-prune` | (bridge) | Full PRD trimmed to 6 stories. Start of talk 2. |
 | `buildclub/ralph` | **Chris — Ralph** | Working Next.js app, manual features. End of talk 2. |
 | `buildclub/agents` | **Ellie — Agentic** | Mastra agents wired into the app. End of talk 3. |
 | `ref/pre-rewrite` | — | Snapshot of the repo before this layout was cut. |
@@ -60,8 +60,9 @@ pnpm install && pnpm dev
 
 ## Further reading
 
-- [Ralph — the autonomous AI agent loop](https://github.com/snarktank/ralph)
-- [Claude Code docs](https://docs.claude.com/en/docs/claude-code)
+- [Stitch](https://stitch.withgoogle.com/) — Google's AI design tool used in talk 1
+- [Ralph — the autonomous AI agent loop](https://github.com/snarktank/ralph) — driving talk 2
 - [Mastra](https://mastra.ai) — the agent framework used in talk 3
+- [Claude Code docs](https://docs.claude.com/en/docs/claude-code)
 - [Supabase + Next.js guide](https://supabase.com/docs/guides/auth/server-side/nextjs)
 - [Meetup page on Luma](https://luma.com/yo5jatjk)
