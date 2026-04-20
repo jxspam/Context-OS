@@ -59,6 +59,13 @@ function Install-Ralph {
     git clone https://github.com/snarktank/ralph.git $ralphDir
 }
 
+function Install-Jq {
+    if (Test-Command jq) { Write-Skip "jq $(jq --version)"; return }
+    Write-Info "installing jq"
+    winget install --id jqlang.jq -e --accept-package-agreements --accept-source-agreements
+    $env:Path = [Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [Environment]::GetEnvironmentVariable("Path","User")
+}
+
 function Install-Supabase {
     if (Test-Command supabase) { Write-Skip "supabase $(supabase --version)"; return }
     Write-Info "installing Supabase CLI"
@@ -106,6 +113,7 @@ Install-Node
 Install-Pnpm
 Install-Gh
 Install-Claude
+Install-Jq
 Install-Ralph
 Install-Supabase
 Install-Vercel
