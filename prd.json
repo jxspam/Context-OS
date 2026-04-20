@@ -45,8 +45,8 @@
         "pnpm typecheck && pnpm lint && pnpm test passes"
       ],
       "priority": 3,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Shipped 2026-04-20: extended createTask to accept a hidden parent_id field (null by default, string uuid when set) so the same action handles both top-level and sub-task inserts. Added AddSubtaskForm client component with a '+ subtask' trigger that reveals an inline required title input; auto-collapses on success, shows role=alert on error. Extracted TaskCard server component; TaskList now fetches all rows, groups children by parent_id into a Map, and passes subtasks as a prop. Sub-tasks render on a surface-container-highest tonal panel (no borders). Parent-delete cascade already covered by the ON DELETE CASCADE in migration 001. Quality gate green: 11 vitest tests pass (6 action incl. new parent_id test + 1 contract + 1 AddTaskForm + 3 AddSubtaskForm)."
     },
     {
       "id": "US-004",
