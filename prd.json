@@ -79,8 +79,8 @@
         "pnpm typecheck && pnpm lint && pnpm test passes"
       ],
       "priority": 5,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Shipped 2026-04-20: added web/src/app/focus/[id]/page.tsx — async server component that awaits params (Next 16 Promise form), fetches the task via supabase .maybeSingle(), and notFound()s on a missing task or missing supabase creds. Renders <FocusView task={...} /> inside the existing app shell (layout already provides ml-64 pt-16 canvas). FocusView is the client island: 25:00 countdown via a single useEffect/setInterval keyed on `running`, Start/Pause/Reset controls, large aria-live timer (role=\"timer\"), task title + notes above, and role=\"status\" 'Done — take a break' when it hits 00:00. ESC keydown and the visible Back button both call router.back(). Linked task titles in TaskCard to /focus/[id] via next/link with a hover-primary colour shift. Tests: 6 new (initial 25:00 render, start→tick→pause holds, reset returns to 25:00, tick-to-zero shows done message, Back click calls router.back, ESC calls router.back). Used fake timers + fireEvent (per testing.md gotcha — userEvent v14 hangs under vi.useFakeTimers). Quality gate green: 29 tests pass total. Not verified: live DB round-trip + browser smoke (no NEXT_PUBLIC_SUPABASE_* creds locally)."
     },
     {
       "id": "US-006",

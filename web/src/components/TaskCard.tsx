@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Task } from "@/lib/types";
 import { AddSubtaskForm } from "./AddSubtaskForm";
 
@@ -11,7 +12,12 @@ export function TaskCard({
   return (
     <li className="bg-surface-container-high p-6 rounded-[var(--radius-card)]">
       <h4 className="text-lg font-semibold text-on-surface mb-2">
-        {task.title}
+        <Link
+          href={`/focus/${task.id}`}
+          className="hover:text-primary transition-colors"
+        >
+          {task.title}
+        </Link>
       </h4>
       {task.notes ? (
         <p className="text-sm text-on-surface-variant leading-relaxed">
