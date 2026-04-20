@@ -12,10 +12,11 @@
 
 - Target Next.js 16. Do not use legacy `pages/` router features.
 - **Server components by default.** Mark a component client only when it needs: state, effects, event handlers, browser APIs, or context consumption.
-- **Server actions** for mutations. Put them in a co-located `actions.ts` with `"use server"` at the top.
-- Use `revalidatePath(path)` after mutations so the cache refreshes.
+- **Server actions** for mutations. Put them in a co-located `actions.ts` with `"use server"` at the top. The file can only export async functions — see `agent-docs/nextjs.md` for the full constraint, the async-primitive migration (cookies/searchParams/params), and the Vitest contract test that enforces it.
 - Routing: file-based. Dynamic segments in brackets (`[id]`). No custom server.
 - Metadata via the `metadata` export, not `<Head>`.
+
+For all other Next 16-specific behaviour (async `cookies()` / `searchParams` / `params`, `useSearchParams` Suspense requirement, flat ESLint config, Turbopack defaults, Supabase `.maybeSingle()` pattern), read `agent-docs/nextjs.md` before writing code.
 
 ## React 19
 

@@ -22,7 +22,8 @@ Your job each iteration: pick the highest-priority user story in `prd.json` wher
 | `design/stitch/` | Reference screenshots/HTML from Stitch |
 | `agent-docs/architecture.md` | Folder layout, rendering model, agent seams |
 | `agent-docs/database.md` | Supabase schema + access patterns |
-| `agent-docs/language.md` | TS + Next.js + React conventions |
+| `agent-docs/language.md` | TS + React conventions |
+| `agent-docs/nextjs.md` | Next 16 quirks: `"use server"` async-only exports, async `cookies()`/`searchParams`/`params`, and the Vitest contract test that enforces them |
 | `agent-docs/design.md` | How to apply the design system |
 | `agent-docs/deployment.md` | Vercel + env vars |
 | `agent-docs/testing.md` | Test commands + CI gate |
