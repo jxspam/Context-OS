@@ -1,8 +1,15 @@
 import { createClient } from "@/lib/supabase/server";
 import type { Task } from "@/lib/types";
+import { matchesFilter, toISODate, type Filter } from "@/lib/filters";
 import { TaskCard } from "./TaskCard";
 
-export async function TaskList() {
+const EMPTY_STATE: Record<Filter, string> = {
+  today: "Nothing due today. Add one above.",
+  upcoming: "No upcoming tasks.",
+  all: "No tasks yet. Add your first one above.",
+};
+
+export async function TaskList({ filter }: { filter: Filter }) {
   const supabase = await createClient();
   let tasks: Task[] = [];
   if (supabase) {
@@ -13,7 +20,7 @@ export async function TaskList() {
     tasks = (data as Task[] | null) ?? [];
   }
 
-  const topLevel = tasks.filter((t) => t.parent_id === null);
+  const today = toISODate(new Date());
   const childrenByParent = new Map<string, Task[]>();
   for (const task of tasks) {
     if (task.parent_id !== null) {
@@ -23,12 +30,14 @@ export async function TaskList() {
     }
   }
 
+  const topLevel = tasks
+    .filter((t) => t.parent_id === null)
+    .filter((t) => matchesFilter(t.due_date, filter, today));
+
   if (topLevel.length === 0) {
     return (
       <div className="bg-surface-container rounded-[var(--radius-card)] py-16 px-8 text-center">
-        <p className="text-on-surface-variant">
-          No tasks yet. Add your first one above.
-        </p>
+        <p className="text-on-surface-variant">{EMPTY_STATE[filter]}</p>
       </div>
     );
   }

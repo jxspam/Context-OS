@@ -1,7 +1,28 @@
+"use client";
+
 import Link from "next/link";
-import { CalendarDays, CalendarPlus, Inbox, Plus, Settings } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import {
+  CalendarDays,
+  CalendarPlus,
+  Inbox,
+  Plus,
+  Settings,
+  type LucideIcon,
+} from "lucide-react";
+import { parseFilter, type Filter } from "@/lib/filters";
+
+const filterItems: Array<{ filter: Filter; label: string; icon: LucideIcon }> =
+  [
+    { filter: "today", label: "Today", icon: CalendarDays },
+    { filter: "upcoming", label: "Upcoming", icon: CalendarPlus },
+    { filter: "all", label: "All", icon: Inbox },
+  ];
 
 export function Sidebar() {
+  const params = useSearchParams();
+  const active = parseFilter(params.get("filter"));
+
   return (
     <aside className="fixed left-0 top-0 h-full w-64 bg-surface-container-low flex flex-col p-6 z-50">
       <div className="mb-10 flex items-center gap-3">
@@ -24,28 +45,24 @@ export function Sidebar() {
         <span>New Context</span>
       </button>
 
-      <nav className="space-y-1">
-        <Link
-          href="/"
-          className="flex items-center gap-3 px-4 py-3 text-primary font-semibold bg-surface-container-high rounded-xl"
-        >
-          <CalendarDays className="w-5 h-5" strokeWidth={1.5} />
-          <span className="text-sm">Today</span>
-        </Link>
-        <Link
-          href="/"
-          className="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container rounded-xl transition-colors"
-        >
-          <CalendarPlus className="w-5 h-5" strokeWidth={1.5} />
-          <span className="text-sm">Upcoming</span>
-        </Link>
-        <Link
-          href="/"
-          className="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container rounded-xl transition-colors"
-        >
-          <Inbox className="w-5 h-5" strokeWidth={1.5} />
-          <span className="text-sm">All</span>
-        </Link>
+      <nav aria-label="Filters" className="space-y-1">
+        {filterItems.map(({ filter, label, icon: Icon }) => {
+          const isActive = active === filter;
+          const className = isActive
+            ? "flex items-center gap-3 px-4 py-3 text-primary font-semibold bg-surface-container-high rounded-xl"
+            : "flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container rounded-xl transition-colors";
+          return (
+            <Link
+              key={filter}
+              href={`/?filter=${filter}`}
+              aria-current={isActive ? "page" : undefined}
+              className={className}
+            >
+              <Icon className="w-5 h-5" strokeWidth={1.5} />
+              <span className="text-sm">{label}</span>
+            </Link>
+          );
+        })}
         <Link
           href="/"
           className="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container rounded-xl transition-colors"

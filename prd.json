@@ -62,8 +62,8 @@
         "pnpm typecheck && pnpm lint && pnpm test passes"
       ],
       "priority": 4,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Shipped 2026-04-20: added web/src/lib/filters.ts with a Filter union (today|upcoming|all), parseFilter (defaults to today, also accepts string|string[]|null|undefined and rejects unknown values), toISODate, and a pure matchesFilter helper. Converted web/src/components/Sidebar.tsx to a client component using useSearchParams so the active filter row is highlighted from the URL; wrapped it in Suspense in layout.tsx per the Next 16 rule for useSearchParams in layout-mounted clients. Filter items now link to /?filter=today|upcoming|all and the active one carries aria-current=\"page\" + the primary/on-surface-container-high treatment. web/src/app/page.tsx is now async, awaits searchParams, passes the parsed filter to TaskList, and swaps the eyebrow/title/section per filter. TaskList takes a filter prop and applies matchesFilter against today's ISO date (UTC) before rendering top-level cards; empty state copy varies by filter. Quality gate green: 23 vitest tests pass (7 filter + 5 Sidebar + the 11 prior)."
     },
     {
       "id": "US-005",
