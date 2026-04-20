@@ -104,10 +104,10 @@ prompt_env() {
     return
   fi
   mkdir -p web
-  printf '\n\033[1mSupabase credentials\033[0m (from https://supabase.com/dashboard → Project Settings → API)\n'
-  printf '  Project URL: '
+  printf '\n\033[1mSupabase credentials\033[0m (from https://supabase.com/dashboard → Project → Settings)\n'
+  printf '  Project URL (Data API, under Integrations): '
   read -r SUPABASE_URL
-  printf '  anon key:    '
+  printf '  publishable key (API Keys → Publishable Keys): '
   read -r SUPABASE_ANON
   cat > "$env_file" <<EOF
 NEXT_PUBLIC_SUPABASE_URL=${SUPABASE_URL}
