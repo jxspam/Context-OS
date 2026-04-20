@@ -49,11 +49,12 @@ describe("createTask", () => {
       title: "Write tests",
       notes: "cover happy path",
       due_date: "2026-04-21",
+      parent_id: null,
     });
     expect(revalidateMock).toHaveBeenCalledWith("/");
   });
 
-  it("inserts null notes and due_date when omitted", async () => {
+  it("inserts null notes, due_date, and parent_id when omitted", async () => {
     const { createTask } = await import("./actions");
     const fd = new FormData();
     fd.set("title", "Just a title");
@@ -63,7 +64,24 @@ describe("createTask", () => {
       title: "Just a title",
       notes: null,
       due_date: null,
+      parent_id: null,
     });
+  });
+
+  it("passes parent_id through when provided (sub-task creation)", async () => {
+    const { createTask } = await import("./actions");
+    const fd = new FormData();
+    fd.set("title", "Sub-task");
+    fd.set("parent_id", "11111111-1111-1111-1111-111111111111");
+    const result = await createTask({ error: null }, fd);
+    expect(result.error).toBeNull();
+    expect(insertMock).toHaveBeenCalledWith({
+      title: "Sub-task",
+      notes: null,
+      due_date: null,
+      parent_id: "11111111-1111-1111-1111-111111111111",
+    });
+    expect(revalidateMock).toHaveBeenCalledWith("/");
   });
 
   it("surfaces insert errors", async () => {

@@ -24,6 +24,10 @@ export async function createTask(
   const due_date =
     typeof rawDue === "string" && rawDue.length > 0 ? rawDue : null;
 
+  const rawParent = formData.get("parent_id");
+  const parent_id =
+    typeof rawParent === "string" && rawParent.length > 0 ? rawParent : null;
+
   const supabase = await createClient();
   if (!supabase) {
     return { error: "Supabase is not configured." };
@@ -31,7 +35,7 @@ export async function createTask(
 
   const { error } = await supabase
     .from("tasks")
-    .insert({ title, notes, due_date });
+    .insert({ title, notes, due_date, parent_id });
 
   if (error) {
     return { error: error.message };
