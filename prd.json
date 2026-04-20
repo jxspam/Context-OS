@@ -30,8 +30,8 @@
         "pnpm typecheck && pnpm lint && pnpm test passes"
       ],
       "priority": 2,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Shipped 2026-04-20: built the app shell (layout, Sidebar, Header, main canvas) per design/DESIGN.md before the feature, then added an AddTaskForm (useActionState, required title, optional notes + due_date) wired to a server action at web/src/app/actions.ts that inserts via @supabase/ssr and calls revalidatePath('/'). Empty title rejected both client (required attr) and server (trim check). TaskList is an async server component listing top-level tasks (parent_id is null). Quality gate green: 7 vitest tests pass across the nextjs contract test, action unit tests, and form render test. Not verified: live DB round-trip (no NEXT_PUBLIC_SUPABASE_* creds locally)."
     },
     {
       "id": "US-003",
