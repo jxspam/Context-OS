@@ -94,8 +94,8 @@
         "pnpm typecheck && pnpm lint && pnpm test passes"
       ],
       "priority": 6,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Shipped 2026-04-20: added .github/workflows/ci.yml (triggers on push to any branch + PRs to main) and .github/workflows/release.yml (triggers on v* tag push). Both use ubuntu-latest, Node 20 via actions/setup-node@v4, and pnpm via corepack; node cache keyed off web/pnpm-lock.yaml. Each workflow starts with a Detect step that writes steps.detect.outputs.web=true|false based on whether web/package.json exists — subsequent pnpm install / typecheck / lint / test steps are gated on that output so the workflow is a graceful no-op on branches that pre-date the web/ scaffold. Release workflow is two jobs: gate (the same quality gate) and release (needs: gate), which checks out with fetch-depth: 0 and calls softprops/action-gh-release@v2 with generate_release_notes: true. permissions: contents: write is scoped to the release workflow only. Both files pass actionlint cleanly; quality gate still green (29 vitest tests pass). Not verified: live GitHub Actions run (requires a push / PR / tag against origin)."
     }
   ]
 }
