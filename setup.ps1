@@ -86,9 +86,9 @@ function Prompt-Env {
     New-Item -ItemType Directory -Force -Path "web" | Out-Null
     Write-Host ""
     Write-Host "Supabase credentials " -ForegroundColor White -NoNewline
-    Write-Host "(from https://supabase.com/dashboard → Project Settings → API)"
-    $url  = Read-Host "  Project URL"
-    $anon = Read-Host "  anon key"
+    Write-Host "(from https://supabase.com/dashboard → Project → Settings)"
+    $url  = Read-Host "  Project URL (Data API, under Integrations)"
+    $anon = Read-Host "  publishable key (API Keys → Publishable Keys)"
     @(
         "NEXT_PUBLIC_SUPABASE_URL=$url"
         "NEXT_PUBLIC_SUPABASE_ANON_KEY=$anon"

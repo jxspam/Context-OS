@@ -22,12 +22,15 @@ Your job each iteration: pick the highest-priority user story in `prd.json` wher
 | `design/stitch/` | Reference screenshots/HTML from Stitch |
 | `agent-docs/architecture.md` | Folder layout, rendering model, agent seams |
 | `agent-docs/database.md` | Supabase schema + access patterns |
-| `agent-docs/language.md` | TS + Next.js + React conventions |
+| `agent-docs/language.md` | TS + React conventions |
+| `agent-docs/nextjs.md` | Next 16 quirks: `"use server"` async-only exports, async `cookies()`/`searchParams`/`params`, and the Vitest contract test that enforces them |
 | `agent-docs/design.md` | How to apply the design system |
 | `agent-docs/deployment.md` | Vercel + env vars |
 | `agent-docs/testing.md` | Test commands + CI gate |
 
-**Read `agent-docs/*.md` before writing code.** They override defaults.
+**Before writing any UI:** open `design/DESIGN.md`, `agent-docs/design.md`, **and** the matching `design/stitch/<screen>/code.html` — the stitch HTML is the layout contract, not optional reference. If the app shell (sidebar + header + main canvas, per `agent-docs/design.md`) doesn't exist yet, build the bare shell first, as part of the current story. Do not invent a parallel layout.
+
+**For non-UI code:** read the relevant `agent-docs/*.md` first. They override defaults.
 
 ## Conventions
 

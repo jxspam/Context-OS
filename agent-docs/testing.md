@@ -30,13 +30,36 @@ Minimal config in `web/vitest.config.ts`:
 ```ts
 import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
-import tsconfigPaths from "vite-tsconfig-paths";
+import { resolve } from "node:path";
 
 export default defineConfig({
-  plugins: [react(), tsconfigPaths()],
+  plugins: [react()],
+  resolve: { alias: { "@": resolve(__dirname, "src") } },
   test: { environment: "jsdom", globals: true, setupFiles: ["./vitest.setup.ts"] },
 });
 ```
+
+Do **not** use `vite-tsconfig-paths` — it's ESM-only and Vite's CJS config loader can't `require()` it. Set `resolve.alias` by hand; simpler and no broken peer dep.
+
+### Gotchas
+
+- **`userEvent` v14 + `vi.useFakeTimers()` hang.** user-event schedules its own zero-delay timers to sequence events; under fake timers they never fire and the test times out. For any assertion that drives `setInterval`/`setTimeout`, switch to `fireEvent.click` / `fireEvent.keyDown` — synchronous, timer-free. Keep `userEvent` for non-timer interactions. Always `vi.useRealTimers()` in an `afterEach`.
+- **Mocking server actions.** Mock `next/cache` and the Supabase server client at the module boundary:
+
+  ```ts
+  vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }));
+  vi.mock("@/lib/supabase/server", () => ({
+    createClient: vi.fn(async () => ({ from: () => ({ insert: insertMock }) })),
+  }));
+  ```
+
+  Set `process.env.NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY` in `beforeEach` so the env-guard early-return doesn't short-circuit the test path.
+
+### Contract tests
+
+Alongside feature tests, keep one **contract test** per invariant the runtime enforces but the compiler doesn't. The prime example is Next 16's `"use server"` async-only exports rule — see `agent-docs/nextjs.md` for the full snippet. That test lives at `web/src/contracts.test.ts` and runs under `pnpm test` with zero extra wiring.
+
+If you discover another class of runtime bug that unit tests missed, add a sibling contract test rather than hoping the next iteration remembers the rule.
 
 ## Playwright (e2e)
 

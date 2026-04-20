@@ -1,0 +1,101 @@
+{
+  "project": "Context-OS",
+  "branchName": "ralph/context-os-manual",
+  "description": "Single-user to-do workspace with nested sub-tasks, Today/Upcoming/All filters, and a focus mode with a 25-minute Pomodoro timer. Plus CI/release plumbing.",
+  "userStories": [
+    {
+      "id": "US-001",
+      "title": "Tasks schema in Supabase",
+      "description": "As a developer, I need a tasks table so the app has somewhere to persist data.",
+      "acceptanceCriteria": [
+        "SQL migration at web/supabase/migrations/001_tasks.sql with columns: id uuid PK, title text not null, notes text, due_date timestamptz, status text default 'open' check (status in ('open','done')), parent_id uuid null references tasks(id) on delete cascade, created_at timestamptz default now()",
+        "Indexes on parent_id and due_date",
+        "supabase db push applies cleanly against the linked project",
+        "pnpm typecheck passes"
+      ],
+      "priority": 1,
+      "passes": true,
+      "notes": "Shipped 2026-04-20: web/supabase/migrations/001_tasks.sql with the exact schema + indexes from agent-docs/database.md. Minimal web/ scaffold (package.json, strict tsconfig, src/lib/types.ts with Task type mirroring the schema) so pnpm typecheck gates cleanly. Added *.tsbuildinfo to .gitignore. Not verified: supabase db push against a linked project (no remote creds in local env)."
+    },
+    {
+      "id": "US-002",
+      "title": "Add a task",
+      "description": "As a user, I want to add a top-level task with a title, optional notes, and an optional due date, so I can start capturing work.",
+      "acceptanceCriteria": [
+        "An 'Add task' form is visible on the Today view",
+        "Fields: title (required), notes (optional), due_date (optional date picker)",
+        "Submit calls a server action that inserts into Supabase",
+        "After submit, the row appears in the task list without a full page reload (use revalidatePath)",
+        "Empty title is rejected client-side and server-side",
+        "pnpm typecheck && pnpm lint && pnpm test passes"
+      ],
+      "priority": 2,
+      "passes": true,
+      "notes": "Shipped 2026-04-20: built the app shell (layout, Sidebar, Header, main canvas) per design/DESIGN.md before the feature, then added an AddTaskForm (useActionState, required title, optional notes + due_date) wired to a server action at web/src/app/actions.ts that inserts via @supabase/ssr and calls revalidatePath('/'). Empty title rejected both client (required attr) and server (trim check). TaskList is an async server component listing top-level tasks (parent_id is null). Quality gate green: 7 vitest tests pass across the nextjs contract test, action unit tests, and form render test. Not verified: live DB round-trip (no NEXT_PUBLIC_SUPABASE_* creds locally)."
+    },
+    {
+      "id": "US-003",
+      "title": "Sub-tasks",
+      "description": "As a user, I want to attach sub-tasks to a parent task so I can break work down.",
+      "acceptanceCriteria": [
+        "Each task row has a '+ subtask' button",
+        "Clicking it reveals an inline input; submitting creates a child task with parent_id set",
+        "Sub-tasks render nested under their parent (one level deep is enough)",
+        "Deleting a parent cascades to children (rely on the FK constraint)",
+        "pnpm typecheck && pnpm lint && pnpm test passes"
+      ],
+      "priority": 3,
+      "passes": true,
+      "notes": "Shipped 2026-04-20: extended createTask to accept a hidden parent_id field (null by default, string uuid when set) so the same action handles both top-level and sub-task inserts. Added AddSubtaskForm client component with a '+ subtask' trigger that reveals an inline required title input; auto-collapses on success, shows role=alert on error. Extracted TaskCard server component; TaskList now fetches all rows, groups children by parent_id into a Map, and passes subtasks as a prop. Sub-tasks render on a surface-container-highest tonal panel (no borders). Parent-delete cascade already covered by the ON DELETE CASCADE in migration 001. Quality gate green: 11 vitest tests pass (6 action incl. new parent_id test + 1 contract + 1 AddTaskForm + 3 AddSubtaskForm)."
+    },
+    {
+      "id": "US-004",
+      "title": "Left-nav filters",
+      "description": "As a user, I want to switch between Today / Upcoming / All so I can focus on what's relevant.",
+      "acceptanceCriteria": [
+        "Left-nav has three items: Today, Upcoming, All",
+        "Selection is reflected in the URL as ?filter=today|upcoming|all (default: today)",
+        "Today: tasks where due_date::date = current_date",
+        "Upcoming: tasks where due_date::date > current_date",
+        "All: every task, no date filter",
+        "Active filter is visually highlighted",
+        "pnpm typecheck && pnpm lint && pnpm test passes"
+      ],
+      "priority": 4,
+      "passes": true,
+      "notes": "Shipped 2026-04-20: added web/src/lib/filters.ts with a Filter union (today|upcoming|all), parseFilter (defaults to today, also accepts string|string[]|null|undefined and rejects unknown values), toISODate, and a pure matchesFilter helper. Converted web/src/components/Sidebar.tsx to a client component using useSearchParams so the active filter row is highlighted from the URL; wrapped it in Suspense in layout.tsx per the Next 16 rule for useSearchParams in layout-mounted clients. Filter items now link to /?filter=today|upcoming|all and the active one carries aria-current=\"page\" + the primary/on-surface-container-high treatment. web/src/app/page.tsx is now async, awaits searchParams, passes the parsed filter to TaskList, and swaps the eyebrow/title/section per filter. TaskList takes a filter prop and applies matchesFilter against today's ISO date (UTC) before rendering top-level cards; empty state copy varies by filter. Quality gate green: 23 vitest tests pass (7 filter + 5 Sidebar + the 11 prior)."
+    },
+    {
+      "id": "US-005",
+      "title": "Focus mode with Pomodoro",
+      "description": "As a user, I want to click a task and enter a focused view with a 25-minute timer so I can actually do the work.",
+      "acceptanceCriteria": [
+        "Clicking a task title routes to /focus/[id]",
+        "Focus view shows only the task title, notes, and a large 25:00 timer",
+        "Controls: Start, Pause, Reset",
+        "Timer ticks down every second; reaching 00:00 shows 'Done — take a break' (no sound)",
+        "Timer state is client-side only (no persistence)",
+        "ESC or a visible 'Back' button exits to the previous view",
+        "pnpm typecheck && pnpm lint && pnpm test passes"
+      ],
+      "priority": 5,
+      "passes": true,
+      "notes": "Shipped 2026-04-20: added web/src/app/focus/[id]/page.tsx — async server component that awaits params (Next 16 Promise form), fetches the task via supabase .maybeSingle(), and notFound()s on a missing task or missing supabase creds. Renders <FocusView task={...} /> inside the existing app shell (layout already provides ml-64 pt-16 canvas). FocusView is the client island: 25:00 countdown via a single useEffect/setInterval keyed on `running`, Start/Pause/Reset controls, large aria-live timer (role=\"timer\"), task title + notes above, and role=\"status\" 'Done — take a break' when it hits 00:00. ESC keydown and the visible Back button both call router.back(). Linked task titles in TaskCard to /focus/[id] via next/link with a hover-primary colour shift. Tests: 6 new (initial 25:00 render, start→tick→pause holds, reset returns to 25:00, tick-to-zero shows done message, Back click calls router.back, ESC calls router.back). Used fake timers + fireEvent (per testing.md gotcha — userEvent v14 hangs under vi.useFakeTimers). Quality gate green: 29 tests pass total. Not verified: live DB round-trip + browser smoke (no NEXT_PUBLIC_SUPABASE_* creds locally)."
+    },
+    {
+      "id": "US-006",
+      "title": "CI and release workflows",
+      "description": "As a developer, I want GitHub Actions workflows so the quality gate runs automatically and releases are reproducible.",
+      "acceptanceCriteria": [
+        ".github/workflows/ci.yml runs on push to any branch and on PRs to main: ubuntu-latest, Node 20, pnpm via corepack; steps: checkout, pnpm install --frozen-lockfile in web/, pnpm -C web typecheck, pnpm -C web lint, pnpm -C web test",
+        "CI workflow skips gracefully if web/package.json doesn't exist yet",
+        ".github/workflows/release.yml runs on push of a tag matching v*: runs the same gate first, then uses softprops/action-gh-release@v2 (or equivalent) to create a GitHub Release with auto-generated notes",
+        "Both workflows pass on a trivial no-op PR against main",
+        "pnpm typecheck && pnpm lint && pnpm test passes"
+      ],
+      "priority": 6,
+      "passes": true,
+      "notes": "Shipped 2026-04-20: added .github/workflows/ci.yml (triggers on push to any branch + PRs to main) and .github/workflows/release.yml (triggers on v* tag push). Both use ubuntu-latest, Node 20 via actions/setup-node@v4, and pnpm via corepack; node cache keyed off web/pnpm-lock.yaml. Each workflow starts with a Detect step that writes steps.detect.outputs.web=true|false based on whether web/package.json exists — subsequent pnpm install / typecheck / lint / test steps are gated on that output so the workflow is a graceful no-op on branches that pre-date the web/ scaffold. Release workflow is two jobs: gate (the same quality gate) and release (needs: gate), which checks out with fetch-depth: 0 and calls softprops/action-gh-release@v2 with generate_release_notes: true. permissions: contents: write is scoped to the release workflow only. Both files pass actionlint cleanly; quality gate still green (29 vitest tests pass). Not verified: live GitHub Actions run (requires a push / PR / tag against origin)."
+    }
+  ]
+}

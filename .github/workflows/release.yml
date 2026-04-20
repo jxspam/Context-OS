@@ -1,0 +1,66 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: detect
+        name: Detect web/ workspace
+        run: |
+          if [ -f web/package.json ]; then
+            echo "web=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "web=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::web/package.json not found — skipping quality gate."
+          fi
+
+      - name: Enable corepack
+        if: steps.detect.outputs.web == 'true'
+        run: corepack enable
+
+      - name: Setup Node 20
+        if: steps.detect.outputs.web == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: pnpm
+          cache-dependency-path: web/pnpm-lock.yaml
+
+      - name: Install dependencies
+        if: steps.detect.outputs.web == 'true'
+        working-directory: web
+        run: pnpm install --frozen-lockfile
+
+      - name: Typecheck
+        if: steps.detect.outputs.web == 'true'
+        run: pnpm -C web typecheck
+
+      - name: Lint
+        if: steps.detect.outputs.web == 'true'
+        run: pnpm -C web lint
+
+      - name: Test
+        if: steps.detect.outputs.web == 'true'
+        run: pnpm -C web test
+
+  release:
+    needs: gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
