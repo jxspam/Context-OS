@@ -1,0 +1,101 @@
+{
+  "project": "Context-OS",
+  "branchName": "ralph/context-os-manual",
+  "description": "Single-user to-do workspace with nested sub-tasks, Today/Upcoming/All filters, and a focus mode with a 25-minute Pomodoro timer. Plus CI/release plumbing.",
+  "userStories": [
+    {
+      "id": "US-001",
+      "title": "Tasks schema in Supabase",
+      "description": "As a developer, I need a tasks table so the app has somewhere to persist data.",
+      "acceptanceCriteria": [
+        "SQL migration at web/supabase/migrations/001_tasks.sql with columns: id uuid PK, title text not null, notes text, due_date timestamptz, status text default 'open' check (status in ('open','done')), parent_id uuid null references tasks(id) on delete cascade, created_at timestamptz default now()",
+        "Indexes on parent_id and due_date",
+        "supabase db push applies cleanly against the linked project",
+        "pnpm typecheck passes"
+      ],
+      "priority": 1,
+      "passes": true,
+      "notes": "Shipped 2026-04-20: web/supabase/migrations/001_tasks.sql with the exact schema + indexes from agent-docs/database.md. Minimal web/ scaffold (package.json, strict tsconfig, src/lib/types.ts with Task type mirroring the schema) so pnpm typecheck gates cleanly. Added *.tsbuildinfo to .gitignore. Not verified: supabase db push against a linked project (no remote creds in local env)."
+    },
+    {
+      "id": "US-002",
+      "title": "Add a task",
+      "description": "As a user, I want to add a top-level task with a title, optional notes, and an optional due date, so I can start capturing work.",
+      "acceptanceCriteria": [
+        "An 'Add task' form is visible on the Today view",
+        "Fields: title (required), notes (optional), due_date (optional date picker)",
+        "Submit calls a server action that inserts into Supabase",
+        "After submit, the row appears in the task list without a full page reload (use revalidatePath)",
+        "Empty title is rejected client-side and server-side",
+        "pnpm typecheck && pnpm lint && pnpm test passes"
+      ],
+      "priority": 2,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-003",
+      "title": "Sub-tasks",
+      "description": "As a user, I want to attach sub-tasks to a parent task so I can break work down.",
+      "acceptanceCriteria": [
+        "Each task row has a '+ subtask' button",
+        "Clicking it reveals an inline input; submitting creates a child task with parent_id set",
+        "Sub-tasks render nested under their parent (one level deep is enough)",
+        "Deleting a parent cascades to children (rely on the FK constraint)",
+        "pnpm typecheck && pnpm lint && pnpm test passes"
+      ],
+      "priority": 3,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-004",
+      "title": "Left-nav filters",
+      "description": "As a user, I want to switch between Today / Upcoming / All so I can focus on what's relevant.",
+      "acceptanceCriteria": [
+        "Left-nav has three items: Today, Upcoming, All",
+        "Selection is reflected in the URL as ?filter=today|upcoming|all (default: today)",
+        "Today: tasks where due_date::date = current_date",
+        "Upcoming: tasks where due_date::date > current_date",
+        "All: every task, no date filter",
+        "Active filter is visually highlighted",
+        "pnpm typecheck && pnpm lint && pnpm test passes"
+      ],
+      "priority": 4,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-005",
+      "title": "Focus mode with Pomodoro",
+      "description": "As a user, I want to click a task and enter a focused view with a 25-minute timer so I can actually do the work.",
+      "acceptanceCriteria": [
+        "Clicking a task title routes to /focus/[id]",
+        "Focus view shows only the task title, notes, and a large 25:00 timer",
+        "Controls: Start, Pause, Reset",
+        "Timer ticks down every second; reaching 00:00 shows 'Done — take a break' (no sound)",
+        "Timer state is client-side only (no persistence)",
+        "ESC or a visible 'Back' button exits to the previous view",
+        "pnpm typecheck && pnpm lint && pnpm test passes"
+      ],
+      "priority": 5,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-006",
+      "title": "CI and release workflows",
+      "description": "As a developer, I want GitHub Actions workflows so the quality gate runs automatically and releases are reproducible.",
+      "acceptanceCriteria": [
+        ".github/workflows/ci.yml runs on push to any branch and on PRs to main: ubuntu-latest, Node 20, pnpm via corepack; steps: checkout, pnpm install --frozen-lockfile in web/, pnpm -C web typecheck, pnpm -C web lint, pnpm -C web test",
+        "CI workflow skips gracefully if web/package.json doesn't exist yet",
+        ".github/workflows/release.yml runs on push of a tag matching v*: runs the same gate first, then uses softprops/action-gh-release@v2 (or equivalent) to create a GitHub Release with auto-generated notes",
+        "Both workflows pass on a trivial no-op PR against main",
+        "pnpm typecheck && pnpm lint && pnpm test passes"
+      ],
+      "priority": 6,
+      "passes": false,
+      "notes": ""
+    }
+  ]
+}
