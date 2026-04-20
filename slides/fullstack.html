@@ -135,6 +135,36 @@
   .code-surface .k { color: var(--section); }
   .code-surface .s { color: var(--green); }
 
+  .matrix {
+    margin-top: 4vh;
+    list-style: none; padding: 0;
+    display: grid; gap: 0;
+    max-width: 92ch;
+  }
+  .matrix li {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1.1fr);
+    gap: 1.5vw;
+    align-items: baseline;
+    font-size: clamp(0.95rem, 1.3vw, 1.25rem);
+    padding: 1.7vh 0;
+    border-top: 1px solid var(--rule);
+    line-height: 1.4;
+  }
+  .matrix li:last-child { border-bottom: 1px solid var(--rule); }
+  .matrix li .job  { font-weight: 500; color: var(--fg-muted); }
+  .matrix li .arr  { color: var(--fg-faint); font-family: "JetBrains Mono", monospace; }
+  .matrix li .tool { color: var(--fg-faint); }
+  .matrix li.here .job  { color: var(--fg); }
+  .matrix li.here .tool { color: var(--fg); }
+  .matrix li.here .arr  { color: var(--section); }
+  .matrix li.here .today {
+    font-style: normal; color: var(--section);
+    font-size: 0.72em; letter-spacing: 0.16em;
+    text-transform: uppercase; font-weight: 600;
+    margin-left: 0.7rem;
+  }
+
   .recap-cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 3vw; margin-top: 5vh; }
   .recap-cols .col { border-top: 1px solid var(--rule); padding-top: 2vh; }
   .recap-cols .col .tag {
@@ -225,10 +255,10 @@
     <div class="title-block">
       <div class="label">Talk 2 of 3 · Brisbane · 20 Apr 2026</div>
       <h1 class="headline">Ship it with <em>Ralph</em>.</h1>
-      <p class="subtitle">Turning a PRD into working code while you walk to the bar.</p>
+      <p class="subtitle">Turning a PRD into working code — one story, one commit, on repeat.</p>
       <div class="meta">
         <span><strong>Chris Raethke</strong></span>
-        <span>@teamcadence.ai</span>
+        <span>@codesoda</span>
       </div>
     </div>
   </section>
@@ -265,7 +295,35 @@
     </ul>
   </section>
 
-  <!-- 5. Meet Ralph -->
+  <!-- 5. Pick your tool -->
+  <section class="slide" style="--section: var(--red)">
+    <div class="label">Pick your tool</div>
+    <h1 class="headline">Different jobs, <em>different agents</em>.</h1>
+    <ul class="matrix">
+      <li>
+        <span class="job">Small bugs, tiny enhancements</span>
+        <span class="arr">→</span>
+        <span class="tool">Single-shot. "Change this one thing."</span>
+      </li>
+      <li>
+        <span class="job">Tricky bugs, small-medium features</span>
+        <span class="arr">→</span>
+        <span class="tool">Plan mode. Plan first, then set it off.</span>
+      </li>
+      <li class="here">
+        <span class="job">New projects, full features <span style="color: var(--fg-faint)">(greenfield)</span></span>
+        <span class="arr">→</span>
+        <span class="tool">PRD + Ralph.<span class="today">← today</span></span>
+      </li>
+      <li>
+        <span class="job">Brownfield, critical updates</span>
+        <span class="arr">→</span>
+        <span class="tool">Agent pairing (SEAMS). Human-in-the-loop.</span>
+      </li>
+    </ul>
+  </section>
+
+  <!-- 6. Meet Ralph -->
   <section class="slide" style="--section: var(--red)">
     <div class="label">Meet Ralph</div>
     <h1 class="headline">An autonomous loop. <em>One story at a time.</em></h1>
