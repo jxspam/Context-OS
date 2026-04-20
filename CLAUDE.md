@@ -27,7 +27,9 @@ Your job each iteration: pick the highest-priority user story in `prd.json` wher
 | `agent-docs/deployment.md` | Vercel + env vars |
 | `agent-docs/testing.md` | Test commands + CI gate |
 
-**Read `agent-docs/*.md` before writing code.** They override defaults.
+**Before writing any UI:** open `design/DESIGN.md`, `agent-docs/design.md`, **and** the matching `design/stitch/<screen>/code.html` — the stitch HTML is the layout contract, not optional reference. If the app shell (sidebar + header + main canvas, per `agent-docs/design.md`) doesn't exist yet, build the bare shell first, as part of the current story. Do not invent a parallel layout.
+
+**For non-UI code:** read the relevant `agent-docs/*.md` first. They override defaults.
 
 ## Conventions
 
